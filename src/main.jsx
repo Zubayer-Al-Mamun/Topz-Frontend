@@ -7,11 +7,15 @@ import { product, products } from './loader/loader'
 import Shop from './components/shop/Shop'
 import Home from './components/home/Home'
 import SingleProduct from './components/SingleProduct'
+import Dashboard from './components/adminPanel/Dashboard'
+import AdminProducts from './components/adminPanel/compo/AdminProducts'
+import AdminProduct from './components/adminPanel/compo/AdminProduct'
 
 const router = createBrowserRouter([
   {
     path : "/",
     element : <Page/>,
+    errorElement : <div>Some error in this Route..</div>,
     children : [
       {
         index : true,
@@ -27,13 +31,37 @@ const router = createBrowserRouter([
         path : "/products/:productId",
         element : <SingleProduct/>,
         loader : product,
+      },
+      {
+        path : "/contacts",
+        element : "this route is under Construction",
       }
     ]
   },
   {
     path:"/admin",
-    element : "this is Admin route"
-  }
+    element : <Dashboard/>,
+    children:[
+      {
+        index : true,
+        element : "Analisis data"
+      },
+      {
+        path : "products/:productId",
+        element : <AdminProduct/>,
+        loader : product,
+      },
+      {
+        path : "products",
+        element : <AdminProducts/>,
+        loader : products,
+      },
+      {
+        path : "*",
+        element : "This route is under Construction"
+      }
+    ]
+  },
 ])
 
 

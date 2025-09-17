@@ -1,10 +1,10 @@
 import { Outlet } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
 
-export default function AdminPage() {
+export default function Dashboard() {
     return (
         <>
-            <div className="flex h-screen bg-gray-100">
+            <div className="flex h-screen bg-gray-100 overflow-hidden">
                 {/* Sidebar */}
 
                 <DashboardSidebar />
