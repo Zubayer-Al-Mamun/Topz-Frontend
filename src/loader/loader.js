@@ -1,4 +1,4 @@
-const url = "https://topz-api.onrender.com";
+const url = "https://topz-backend.onrender.com";
 
 export async function products() {
   try {
