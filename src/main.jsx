@@ -10,6 +10,7 @@ import SingleProduct from './components/SingleProduct'
 import Dashboard from './components/adminPanel/Dashboard'
 import AdminProducts from './components/adminPanel/compo/AdminProducts'
 import AdminProduct from './components/adminPanel/compo/AdminProduct'
+import AddProduct from './components/adminPanel/AddProduct'
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         index : true,
         element : "Analisis data"
+      },
+      {
+        path : "productadd",
+        element : <AddProduct/>
       },
       {
         path : "products/:productId",

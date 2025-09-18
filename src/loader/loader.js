@@ -1,5 +1,6 @@
-const url = "https://topz-backend.onrender.com";
+// const url = "https://topz-backend.onrender.com";
 // const url = "http://localhost:8000";
+const url = "https://cgt900jz-8000.inc1.devtunnels.ms";
 
 export async function products() {
   try {
