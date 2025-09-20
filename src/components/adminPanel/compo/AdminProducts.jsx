@@ -2,6 +2,7 @@ import { Link, useLoaderData } from "react-router-dom";
 
 export default function AdminProducts() {
     const products = useLoaderData();
+    console.log(products);
     return (
         <div className="overflow-y-scroll">
             <div className="m-2 border-b p-2 flex items-center">

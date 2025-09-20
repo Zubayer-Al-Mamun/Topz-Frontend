@@ -1,29 +1,31 @@
 import { useState } from "react";
-import ProductColorInpu from "./compo/ProductColorInpu";
+import { useLoaderData } from "react-router-dom";
 
-export default function AddProduct() {
+export default function ProductEdit() {
+    const product = useLoaderData();
+    console.log(product.vars);
     const [moreColor, setMoreColor] = useState(false);
-    const product = {
-        color: {
-            code: "#6f4e37",
-            name: "Coffee Brown",
-        },
-        imageUrl: "https://example.com/product-coffee-brown.jpg",
-        sizes: [
-            {
-                size: "M",
-                stock: 30,
-            },
-            {
-                size: "L",
-                stock: 30,
-            },
-            {
-                size: "XL",
-                stock: 30,
-            },
-        ],
-    };
+    // const product = {
+    //     color: {
+    //         code: "#6f4e37",
+    //         name: "Coffee Brown",
+    //     },
+    //     imageUrl: "https://example.com/product-coffee-brown.jpg",
+    //     sizes: [
+    //         {
+    //             size: "M",
+    //             stock: 30,
+    //         },
+    //         {
+    //             size: "L",
+    //             stock: 30,
+    //         },
+    //         {
+    //             size: "XL",
+    //             stock: 30,
+    //         },
+    //     ],
+    // };
 
     return (
         <div className="min-h-screen w-full bg-gray-100 p-4 sm:p-6 overflow-y-scroll">
@@ -43,7 +45,7 @@ export default function AddProduct() {
                                 </label>
                                 <input
                                     type="text"
-                                    defaultValue="Classic White Tee"
+                                    value={product.title}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -54,7 +56,7 @@ export default function AddProduct() {
                                 </label>
                                 <textarea
                                     rows="4"
-                                    defaultValue="Soft cotton crew neck t-shirt, everyday wear."
+                                    value={product.description}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -66,7 +68,7 @@ export default function AddProduct() {
                                     </label>
                                     <input
                                         type="text"
-                                        defaultValue="hoodie"
+                                        value={product.category}
                                         className="w-full mt-1 p-2 border rounded-lg"
                                     />
                                 </div>
@@ -76,7 +78,7 @@ export default function AddProduct() {
                                     </label>
                                     <input
                                         type="text"
-                                        defaultValue="casual"
+                                        value={product.subcategory}
                                         className="w-full mt-1 p-2 border rounded-lg"
                                     />
                                 </div>
@@ -92,7 +94,6 @@ export default function AddProduct() {
                                 >
                                     <option value="male">Male</option>
                                     <option value="female">Female</option>
-                                    <option value="unisex">Unisex</option>
                                 </select>
                             </div>
                         </div>
@@ -110,7 +111,7 @@ export default function AddProduct() {
                                 </label>
                                 <input
                                     type="number"
-                                    defaultValue={400}
+                                    value={product.pricing}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -120,7 +121,7 @@ export default function AddProduct() {
                                 </label>
                                 <input
                                     type="number"
-                                    defaultValue={350}
+                                    value={product.discountsPrice}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -132,7 +133,7 @@ export default function AddProduct() {
                                 </label>
                                 <input
                                     type="number"
-                                    defaultValue={30}
+                                    value={product.discountsPercentage}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -142,7 +143,7 @@ export default function AddProduct() {
                                 </label>
                                 <input
                                     type="number"
-                                    defaultValue={50}
+                                    value={product.stock}
                                     className="w-full mt-1 p-2 border rounded-lg"
                                 />
                             </div>
@@ -151,68 +152,131 @@ export default function AddProduct() {
 
                     {/* Sizes & Colors */}
                     <div className="p-5 border rounded-xl">
-                        {/* <div className="flex justify-between items-center mb-4">
-                            <div className="text-lg font-semibold">
-                                Sizes & Colors
-                            </div>
-                            <div className="w-[50%] flex">
-                                <span className="font-semibold p-2">
-                                    মোট কয়টি :
-                                </span>
-                                <input
-                                    className="border-2 border-red-500 rounded-lg p-2  w-[60px]"
-                                    type="number"
-                                    value={colorNumber}
-                                    name=""
-                                    onChange={(e) =>
-                                        setColorNumber(e.target.value)
-                                    }
-                                />
-                            </div>
-                        </div> */}
-
                         <div className="text-lg font-semibold mb-2">
                             Sizes & Colors
                         </div>
+
                         <div className="space-y-4">
-                            <ProductColorInpu
-                                setMoreColor={setMoreColor}
-                                moreColor={moreColor}
-                                name={["1", "2", "3"]}
-                            />
+                            {product.vars.map((color, idx) => (
+                                <div className="flex flex-col gap-3 p-1 rounded-md bg-[#d9c3b0] mb-2">
+                                    <h1 className="text-center font-semibold">
+                                        Color {idx + 1}
+                                    </h1>
+                                    {/* Color Input */}
+                                    <div className="flex flex-col sm:flex-row gap-4">
+                                        <div className="flex-1">
+                                            <label className="block text-sm font-medium">
+                                                Color Code
+                                            </label>
+                                            <input
+                                                type="color"
+                                                value={color.colorCode}
+                                                className="w-full h-10 mt-1 p-1 border rounded-lg"
+                                            />
+                                        </div>
 
-                            {moreColor && (
-                                <ProductColorInpu
-                                    setMoreColor={setMoreColor}
-                                    moreColor={moreColor}
-                                    name={["4", "5", "6"]}
-                                />
-                            )}
-
-                            {/* 
-                            {["s", "m", "l", "xl", "xxl"].map((size) => (
-                                <div className="flex flex-col sm:flex-row gap-4 items-start">
-                                    <div className="flex-1">
-                                        <label className="block text-sm font-medium">
-                                            Size ({size.toUpperCase()})
-                                        </label>
-                                        <input
-                                            type="number"
-                                            className="w-full mt-1 p-2 border rounded-lg"
-                                        />
+                                        <div className="flex-1">
+                                            <label className="block text-sm font-medium">
+                                                Color Name
+                                            </label>
+                                            <input
+                                                type="text"
+                                                value={color.color}
+                                                className="w-full mt-1 p-2 border rounded-lg"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="flex-1">
+
+                                    {/* Image URL */}
+                                    <div className="flex justify-between md:justify-evenly px-1">
+                                        <div className="flex items-center">
+                                            <div className="">
+                                                <label className="block text-sm font-medium">
+                                                    Image (Font)
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className=" w-[72px] text-sm border rounded-lg m-2"
+                                                />
+                                            </div>
+                                            <div className="flex justify-center ml-2 rounded-lg overflow-hidden">
+                                                <img
+                                                    className="h-[100px]"
+                                                    src={color.imageUrl[0]}
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center">
+                                            <div className="">
+                                                <label className="block text-sm font-medium">
+                                                    Image (Back)
+                                                </label>
+                                                <input
+                                                    type="file"
+                                                    accept="image/*"
+                                                    className=" w-[72px] text-sm border rounded-lg m-2"
+                                                />
+                                            </div>
+                                            <div className="flex justify-center ml-2 rounded-lg overflow-hidden">
+                                                <img
+                                                    className="h-[100px]"
+                                                    src={color.imageUrl[1]}
+                                                    alt=""
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Sizes */}
+                                    <div>
                                         <label className="block text-sm font-medium">
-                                            Colors
+                                            Sizes & Stock
                                         </label>
-                                        <input
-                                            type="text"
-                                            defaultValue="red, green, yellow, coffee"
-                                            className="w-full mt-1 p-2 border rounded-lg"
-                                        />
+                                        <div className="flex flex-col sm:flex-row gap-4 mt-2">
+                                            <div className="flex-1">
+                                                <input
+                                                    type="text"
+                                                    defaultValue="M"
+                                                    className="w-full p-2 border rounded-lg"
+                                                />
+                                                <input
+                                                    type="number"
+                                                    defaultValue="30"
+                                                    className="w-full mt-1 p-2 border rounded-lg"
+                                                />
+                                            </div>
+
+                                            <div className="flex-1">
+                                                <input
+                                                    type="text"
+                                                    defaultValue="L"
+                                                    className="w-full p-2 border rounded-lg"
+                                                />
+                                                <input
+                                                    type="number"
+                                                    defaultValue="30"
+                                                    className="w-full mt-1 p-2 border rounded-lg"
+                                                />
+                                            </div>
+
+                                            <div className="flex-1">
+                                                <input
+                                                    type="text"
+                                                    defaultValue="XL"
+                                                    className="w-full p-2 border rounded-lg"
+                                                />
+                                                <input
+                                                    type="number"
+                                                    defaultValue="30"
+                                                    className="w-full mt-1 p-2 border rounded-lg"
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            ))} */}
+                            ))}
                         </div>
                     </div>
 
@@ -286,17 +350,15 @@ export default function AddProduct() {
                             Upload Images
                         </h2>
                         <div className="flex flex-wrap gap-3">
-                            {[
-                                "https://images.unsplash.com/photo-1637264486270-3238d60aa71a?q=80&w=1470",
-                                "https://images.pexels.com/photos/6311657/pexels-photo-6311657.jpeg",
-                                "https://images.pexels.com/photos/6311670/pexels-photo-6311670.jpeg",
-                            ].map((img, i) => (
-                                <img
-                                    key={i}
-                                    src={img}
-                                    alt="product"
-                                    className="w-20 h-20 object-cover border rounded-lg"
-                                />
+                            {product.vars.map((color) => (
+                                color.imageUrl.map((img, idx) => (
+                                    <img
+                                        key={idx}
+                                        src={img}
+                                        alt="product"
+                                        className="w-20 h-20 object-cover border rounded-lg"
+                                    />
+                                ))
                             ))}
                         </div>
                     </div>

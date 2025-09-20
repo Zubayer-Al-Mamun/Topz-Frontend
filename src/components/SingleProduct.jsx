@@ -6,6 +6,7 @@ export default function SingleProduct() {
     const [selectedImage, setSelectedImage] = useState(0);
 
     const images = product.imageUrl;
+    console.log(images);
 
     return (
         <div className="max-w-7xl mx-auto p-6">
@@ -51,7 +52,7 @@ export default function SingleProduct() {
                             <span className="text-gray-300">☆</span>
                         </div>
                         <span className="text-sm text-gray-600">
-                            {product.reviews.length} Reviews
+                            {/* {product.reviews.length} Reviews */}
                         </span>
                     </div>
 
@@ -59,14 +60,14 @@ export default function SingleProduct() {
                     <div className="mt-4">
                         <p className="font-medium">Size</p>
                         <div className="flex space-x-3 mt-2">
-                            {["S", "M", "L"].map((size) => (
+                            {/* {["M", "L", "XL"].map((size) => (
                                 <button
                                     key={size}
                                     className="px-4 py-2 border rounded-lg hover:bg-gray-100"
                                 >
                                     {size}
                                 </button>
-                            ))}
+                            ))} */}
                         </div>
                     </div>
 
@@ -92,7 +93,7 @@ export default function SingleProduct() {
                     <div className="mt-6">
                         <h3 className="font-semibold">About Product</h3>
                         <p className="text-gray-600 text-sm mt-2">
-                            {product.description}
+                            {/* {product.description} */}
                         </p>
                     </div>
                 </div>
@@ -104,14 +105,14 @@ export default function SingleProduct() {
                 <div>
                     <h3 className="font-bold text-lg">All reviews</h3>
 
-                    {product.reviews.map((review,idx) => (
+                    {/* {product.reviews.map((review,idx) => (
                         <div key={idx} className="mt-3 border p-4 rounded-lg shadow-sm">
                             <p className="font-semibold">Zeynel ★★★★★</p>
                             <p className="text-gray-600 text-sm mt-1">
                                 {review}
                             </p>
                         </div>
-                    ))}
+                    ))} */}
                 </div>
 
                 {/* Images */}

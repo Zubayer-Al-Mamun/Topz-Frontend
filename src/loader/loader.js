@@ -29,6 +29,7 @@ export async function product({params}) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
     const data = await response.json(); // Parse JSON
+    console.log(data);
     return data;
 
   }catch(err){

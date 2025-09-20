@@ -11,6 +11,7 @@ import Dashboard from './components/adminPanel/Dashboard'
 import AdminProducts from './components/adminPanel/compo/AdminProducts'
 import AdminProduct from './components/adminPanel/compo/AdminProduct'
 import AddProduct from './components/adminPanel/AddProduct'
+import ProductEdit from './components/adminPanel/ProductEdit'
 
 const router = createBrowserRouter([
   {
@@ -48,14 +49,19 @@ const router = createBrowserRouter([
         element : "Analisis data"
       },
       {
+        path : "products/:productId",
+        element : <ProductEdit/>,
+        loader : product
+      },
+      {
         path : "productadd",
         element : <AddProduct/>
       },
-      {
-        path : "products/:productId",
-        element : <AdminProduct/>,
-        loader : product,
-      },
+      // {
+      //   path : "products/:productId",
+      //   element : <AdminProduct/>,
+      //   loader : product,
+      // },
       {
         path : "products",
         element : <AdminProducts/>,
@@ -74,6 +80,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}></RouterProvider>
+    <RouterProvider fallback router={router}></RouterProvider>
   </StrictMode>,
 )

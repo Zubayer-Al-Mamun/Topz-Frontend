@@ -9,6 +9,7 @@ export default function Dashboard() {
                         <div className="col-span-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-2xl p-6 shadow">
                             <h2 className="text-lg font-semibold">
                                 Website Analytics
+                                
                             </h2>
                             <p className="text-sm opacity-80 mb-4">
                                 Total 28.5k Visitors this month

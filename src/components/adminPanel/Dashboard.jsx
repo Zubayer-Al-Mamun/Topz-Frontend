@@ -1,8 +1,9 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigation } from "react-router-dom";
 import DashboardSidebar from "./DashboardSidebar";
-import MenuIcon from "../../assets/menu.svg";
+import Loading from "../Loading";
 
 export default function Dashboard() {
+    const navigation = useNavigation();
 
     // const [showDashboardSidebar, setShowDashboardSidebar] = useState(false);
     return (
@@ -10,12 +11,11 @@ export default function Dashboard() {
             <div className="flex h-screen bg-[#ECEEDF] overflow-hidden">
                 {/* Sidebar */}
 
-                 <DashboardSidebar /> 
+                <DashboardSidebar />
 
                 {/* Main Content */}
-                <div className="flex-1 flex flex-col">
+                <div className="flex-1 flex flex-col relative">
                     <header className="bg-[#d9c4b0] h-[60px] flex items-center justify-between px-6 shadow-sm">
-                        
                         {/* <div onClick={()=> setShowDashboardSidebar(true)} className="sm:hidden flex items-center p-3">
                             <img src={MenuIcon} className="h-[30px]" alt="" />
                         </div> */}
@@ -31,10 +31,10 @@ export default function Dashboard() {
                         </div>
                     </header>
 
-
-                    <Outlet/>
-
-                    
+                    {navigation.state === "loading" && (
+                        <Loading/>
+                    )}
+                    <Outlet />
                 </div>
             </div>
             {/* <Outlet/> */}
