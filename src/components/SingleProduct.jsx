@@ -5,8 +5,8 @@ export default function SingleProduct() {
     const product = useLoaderData();
     const [selectedImage, setSelectedImage] = useState(0);
 
-    const images = product.imageUrl;
-    console.log(images);
+    // const images = product.imageUrl;
+    console.log(product);
 
     return (
         <div className="max-w-7xl mx-auto p-6">
@@ -15,13 +15,13 @@ export default function SingleProduct() {
                 <div>
                     <div className="rounded-xl overflow-hidden shadow-lg">
                         <img
-                            src={images[selectedImage]}
+                            src={product.vars[0].imageUrl[0]}
                             alt="Product"
                             className="w-full h-[400px] object-cover"
                         />
                     </div>
                     <div className="flex space-x-3 mt-4">
-                        {images.map((img, index) => (
+                        {/* {images.map((img, index) => (
                             <img
                                 key={index}
                                 src={img}
@@ -33,7 +33,7 @@ export default function SingleProduct() {
                                         : "border-gray-200"
                                 }`}
                             />
-                        ))}
+                        ))} */}
                     </div>
                 </div>
 
@@ -113,6 +113,9 @@ export default function SingleProduct() {
                             </p>
                         </div>
                     ))} */}
+
+
+                    
                 </div>
 
                 {/* Images */}

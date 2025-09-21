@@ -4,6 +4,7 @@ export default function AdminProducts() {
     const products = useLoaderData();
     console.log(products);
     return (
+        // <div>this is products page</div>
         <div className="overflow-y-scroll">
             <div className="m-2 border-b p-2 flex items-center">
                 <Link to="/admin/productadd" className="p-2 bg-[#51a2ff] rounded-md hover:bg-indigo-100 ">Add Product</Link>
@@ -22,7 +23,7 @@ export default function AdminProducts() {
                     <div className="h-full flex">
                         <img
                             className="h-full w-[100px] object-cover "
-                            src={product.imageUrl[1]}
+                            src={product.vars[0].imageUrl[0]}
                             alt=""
                         />
                         <div className="m-2">

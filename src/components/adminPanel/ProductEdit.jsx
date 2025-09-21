@@ -4,7 +4,7 @@ import { useLoaderData } from "react-router-dom";
 export default function ProductEdit() {
     const product = useLoaderData();
     console.log(product.vars);
-    const [moreColor, setMoreColor] = useState(false);
+    // const [moreColor, setMoreColor] = useState(false);
     // const product = {
     //     color: {
     //         code: "#6f4e37",

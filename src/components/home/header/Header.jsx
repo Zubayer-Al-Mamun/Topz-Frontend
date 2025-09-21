@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import Cart from "./CartIcon";
 import Logo from "./Logo";
 import Menu from "./Menu";
@@ -20,6 +20,8 @@ export default function Header({showCategory, setShowSideNavbar}) {
                     <Logo />
 
                     <NavItems showCategory={showCategory}/>
+
+                    <Link className="p-1 border font-bold text-red-500" to="/admin">Go Admin panel</Link>
                     {/* <div className=  { showCategory ? "max-sm:hidden h-full flex items-center" : "max-sm:hidden h-full hidden items-center"}>
                         <NavLink
                             className={({ isActive }) =>

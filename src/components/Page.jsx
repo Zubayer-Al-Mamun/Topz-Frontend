@@ -44,6 +44,7 @@ export default function Page() {
                     {navigation.state === "loading" && <Loading />} */}
 
                     <div className=" h-full w-full flex flex-col items-center relative">
+                        <div className='text-3xl text-red-400'>It's still a work in progress.</div>
                         <Outlet />
                     </div>
                 </div>

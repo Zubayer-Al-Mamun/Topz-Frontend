@@ -9,7 +9,7 @@ export default function Product({product}) {
                     {/* Main Image */}
                     <div className=" w-full h-[200px] flex justify-center">
                         <img
-                            src={product.imageUrl[0]}
+                            src={product.vars[0].imageUrl[0]}
                             alt="Nike Air Max 270"
                             className="w-full object-cover"
                         />
@@ -48,30 +48,6 @@ export default function Product({product}) {
                             Buy now
                         </button>
                     </div>
-
-                    {/* Thumbnails */}
-                    {/* <div className="mt-4 flex justify-center space-x-2">
-                        <img
-                            src="https://via.placeholder.com/50"
-                            alt="thumb1"
-                            className="w-12 h-12 object-cover rounded-lg border-2 border-blue-500"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50"
-                            alt="thumb2"
-                            className="w-12 h-12 object-cover rounded-lg border"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50"
-                            alt="thumb3"
-                            className="w-12 h-12 object-cover rounded-lg border"
-                        />
-                        <img
-                            src="https://via.placeholder.com/50"
-                            alt="thumb4"
-                            className="w-12 h-12 object-cover rounded-lg border"
-                        />
-                    </div> */}
                 </NavLink>
     );
 }

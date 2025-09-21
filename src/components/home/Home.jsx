@@ -6,6 +6,7 @@ import { useLoaderData } from "react-router-dom";
 
 export default function Home() {
     const products = useLoaderData();
+    // console.log(products);
     return (
         <div className="w-[100%] lg:w-[1024px] sm:mt-1 flex flex-col items-center ">
             <div className="w-[100%] flex justify-center relative">

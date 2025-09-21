@@ -46,7 +46,7 @@ const router = createBrowserRouter([
     children:[
       {
         index : true,
-        element : "Analisis data"
+        element : <div className='text-3xl text-red-400'>Products, EditProduct and ProductAdd is available now</div>
       },
       {
         path : "products/:productId",
