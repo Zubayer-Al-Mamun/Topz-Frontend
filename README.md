@@ -22,6 +22,7 @@ Tech Tools :
 
 ---
  Project Structure
+ ```bash
 
 ├── public/ # Static assets (favicon, index.html, etc.)
 ├── src/
@@ -51,7 +52,7 @@ Tech Tools :
 ├── README.md
 └── vite.config.js
 
-
+```
 ##  Installation & Setup
 
 ```bash
@@ -60,7 +61,7 @@ cd fashion-trendy-clothing
 npm install
 npm run dev
 
-
+```
 Now open:
 👉 http://localhost:5173/
 
