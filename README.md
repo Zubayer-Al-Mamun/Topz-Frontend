@@ -17,8 +17,8 @@ Tech Tools :
 
 - **Frontend:** React + Vite  
 - **Styling:** TailwindCSS  
-- **State Management:** React hooks / useContext (if used)  
-- **Backend (Optional):** Express.js (if you want API integration)  
+- **State Management:** React hooks 
+- **Backend:** Express.js
 
 ---
  Project Structure
