@@ -1,6 +1,7 @@
+
 export default function Pricing({formData, setFormData}) {
     return (
-        <div className="p-5 border rounded-xl">
+        <div className="p-5  max-sm:p-1 border rounded-xl">
             <h2 className="text-lg font-semibold mb-4">Pricing & Stock</h2>
             <div className="flex flex-col sm:flex-row gap-4">
                 <div className="flex-1">

@@ -1,6 +1,7 @@
 // import { useState } from "react";
 
 export default function SingleProduct({product}) {
+    
 
 
     // const product = useLoaderData();
