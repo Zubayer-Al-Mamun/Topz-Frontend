@@ -34,8 +34,7 @@ export default function ProductForm() {
     });
 
     try {
-      const res = await fetch(
-        "https://sn34t60d-3000.inc1.devtunnels.ms/product",
+      const res = await fetch(import.meta.env.VITE_API_URL + "/product",
         {
           method: "POST",
           body: data,
