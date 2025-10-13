@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+*{
+  /* overflow: hidden; */
+  box-sizing: border-box;
+}
+
+
+@font-face {
+   font-family: bang;
+   src: url(./assets/font/bangla.ttf);
+}
+
+.bangla-text{
+    font-family: bang;
+    font-weight:bold;
+}
+

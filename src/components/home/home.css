@@ -1,0 +1,35 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+Da+2:wght@400..800&family=Noto+Sans+Bengali:wght@100..900&family=Zen+Dots&display=swap");
+
+/* .product-cont::-webkit-scrollbar {
+    display: none;
+    width: 0px;
+} */
+
+
+
+
+
+
+.shop-now-btn {
+    -webkit-text-stroke: 1px black;
+
+    font-family: "Noto Sans Bengali", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 900;
+    font-style: normal;
+    text-shadow: 0 0 5px #fbff00, 0 0 10px #fbff00, 0 0 20px #fbff00, 0 0 40px #fbff00, 0 0 80px #fbff00;
+    animation: glow 1.5s infinite alternate;
+}
+
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 5px #fbff00, 0 0 10px #fbff00, 0 0 20px #fbff00, 0 0 40px #fbff00, 0 0 80px #fbff00;
+    }
+    100% {
+        text-shadow: 0 0 10px #15b71a, 0 0 20px #15b71a, 0 0 40px #15b71a, 0 0 80px #15b71a, 0 0 160px #15b71a;
+    }
+}
+
+.star-cont{
+    background-color: rgba(0, 0, 0, 0.334);
+}
