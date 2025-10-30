@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
 import Header from "./home/header/Header";
 import SideNavbar from "./home/SideNavbar";
@@ -11,10 +11,21 @@ export default function Page() {
     const [showCategory, setShowCategory] = useState(true);
     const scrollRef = useRef(0);
 
+
+
+//     useEffect(() => {
+//     // Page load এর পর একটু scroll করানো হয়
+//     const timer = setTimeout(() => {
+//       window.scrollTo(0, 200); // Chrome header hide করে
+//     }, 300);
+
+//     return () => clearTimeout(timer);
+//   }, []);
+
     return (
         <>
             <div
-                className="bg-[#ECEEDF] w-[100%] relative flex flex-col items-center "
+                className="bg-[#09090915] w-[100%] relative flex flex-col items-center "
                 onWheel={(e) => {
                     if (scrollRef.current < e.pageY) {
                         scrollRef.current = e.pageY;
@@ -26,9 +37,9 @@ export default function Page() {
                 }}
             >
                 
-                <div className="h-[100vh] absolute flex justify-baseline w-full">
+                {/* <div className="h-[100vh] absolute flex justify-baseline w-full">
                     {navigation.state === "loading" && <Loading />}
-                </div>
+                </div> */}
 
 
                 <Header
@@ -39,11 +50,11 @@ export default function Page() {
                     <SideNavbar setShowSideNavbar={setShowSideNavbar} />
                 )}
 
-                <div className="w-full mt-[60px] max-sm:mt-[110px] h-[100%] ">
+                <div className="w-full mt-[60px] h-[100%] ">
                     {/* 
                     {navigation.state === "loading" && <Loading />} */}
 
-                    <div className=" h-full w-full flex flex-col items-center relative">
+                    <div className=" h-full w-full flex flex-col items-center relative bg-[#F8F8F0]">
                        <Outlet />
                     </div>
                 </div>

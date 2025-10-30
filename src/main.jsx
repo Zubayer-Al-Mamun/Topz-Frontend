@@ -11,8 +11,10 @@ import AdminProducts from "./components/adminPanel/compo/AdminProducts";
 import Analytics from "./components/adminPanel/compo/Analytics";
 import Home from "./components/home/Home";
 import Shop from "./components/shop/Shop";
+import PrivateRoute from "./components/PrivateRoute"; // ✅ import this
 import "./index.css";
 import { product, products } from "./loader/loader";
+import Login from "./components/adminPanel/login";
 
 const router = createBrowserRouter([
     {
@@ -26,47 +28,58 @@ const router = createBrowserRouter([
                 loader: products,
             },
             {
-                path: "/shop",
+                path: "shop",
                 element: <Shop />,
                 loader: products,
             },
             {
-                path: "/products/:productId",
+                path: "product/:productId",
                 element: <SingleProduct />,
                 loader: product,
             },
             {
-                path: "/contacts",
-                element: "this route is under Construction",
+                path: "contacts",
+                element: <div>This route is under Construction</div>,
             },
+            {
+                path : "login",
+                element : <Login/>
+            }
         ],
     },
+
+    // ✅ Protected Admin Routes
     {
         path: "/admin",
-        element: <Dashboard />,
+        element: <PrivateRoute />, // Protect all admin routes
         children: [
             {
-                index: true,
-                element: <Analytics />,
-            },
-            {
-                path: "products/:productId",
-                element: <ProductEdit />,
-                loader: product,
-            },
-            {
-                path: "newproduct",
-                element: <AddProduct />,
-                action : addProduct
-            },
-            {
-                path: "products",
-                element: <AdminProducts />,
-                loader: products,
-            },
-            {
-                path: "*",
-                element: "This route is under Construction",
+                element: <Dashboard />, // Dashboard layout
+                children: [
+                    {
+                        index: true,
+                        element: <Analytics />,
+                    },
+                    {
+                        path: "products",
+                        element: <AdminProducts />,
+                        loader: products,
+                    },
+                    {
+                        path: "products/:productId",
+                        element: <ProductEdit />,
+                        loader: product,
+                    },
+                    {
+                        path: "newproduct",
+                        element: <AddProduct />,
+                        action: addProduct,
+                    },
+                    {
+                        path: "*",
+                        element: <div>This route is under Construction</div>,
+                    },
+                ],
             },
         ],
     },
@@ -74,6 +87,6 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById("root")).render(
     <StrictMode>
-        <RouterProvider fallback router={router}></RouterProvider>
+        <RouterProvider router={router} />
     </StrictMode>
 );

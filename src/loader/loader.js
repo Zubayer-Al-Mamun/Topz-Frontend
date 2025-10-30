@@ -3,7 +3,7 @@
 // const url = "https://cgt900jz-8000.inc1.devtunnels.ms";
 // const url = "https://sn34t60d-8000.inc1.devtunnels.ms";
 
-import { getProduct, getProducts } from "../products";
+const url = import.meta.env.VITE_API_URL;
 
 
 
@@ -15,47 +15,39 @@ import { getProduct, getProducts } from "../products";
 
 export async function products() {
 
-  return getProducts();
-
-
-
-  // try {
-  //   const response = await fetch(`${url}/products`);
+  try {
+    const response = await fetch(`${url}/products`);
     
-  //   if (!response.ok) {
-  //     // Handle HTTP errors
-  //     throw new Error(`HTTP error! status: ${response.status}`);
-  //   }
+    if (!response.ok) {
+      // Handle HTTP errors
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
 
-  //   const data = await response.json(); // Parse JSON
-  //   return data; // Return the actual JSON
+    const data = await response.json(); // Parse JSON
+    return data; // Return the actual JSON
     
-  // } catch (err) {
-  //   console.error("Failed to fetch products:", err);
-  //   throw err; // React Router loader will catch this
-  // }
+  } catch (err) {
+    console.error("Failed to fetch products:", err);
+    throw err; // React Router loader will catch this
+  }
 }
 
 
 export async function product({params}) {
 
   const {productId} = params;
-  return getProduct(productId);
+  try{
+    const response = await fetch(`${url}/product/${productId}`);
+    if(!response.ok){
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json(); // Parse JSON
+    console.log(data);
+    return data;
 
-
-  // const {productId} = params;
-  // try{
-  //   const response = await fetch(`${url}/products/${productId}`);
-  //   if(!response.ok){
-  //     throw new Error(`HTTP error! status: ${response.status}`);
-  //   }
-  //   const data = await response.json(); // Parse JSON
-  //   console.log(data);
-  //   return data;
-
-  // }catch(err){
-  //   console.log("Product fecth problem..",err);
-  //   throw err;
-  // }
+  }catch(err){
+    console.log("Product fecth problem..",err);
+    throw err;
+  }
 
 }
