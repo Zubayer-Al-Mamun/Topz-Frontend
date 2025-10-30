@@ -28,8 +28,10 @@ export default function AdminProducts() {
                         <div className="m-2">
                             <p>{product.title}</p>
                             <p>Total Sale : {product.totalSale}</p>
+                            <p>Total Sale : {product.totalView}</p>
                         </div>
                     </div>
+
                     <div className=" h-full flex items-center">
                         <Link
                             to={`/admin/products/${product.productId}`}

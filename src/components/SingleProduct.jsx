@@ -33,6 +33,9 @@ export default function SingleProduct() {
     }, [product._id]);
 
 
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    })
     return (
         <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center ">
             {/* Container */}
