@@ -1,10 +1,9 @@
 // const url = "https://topz-backend.onrender.com";
 // const url = "http://localhost:8000";
 // const url = "https://cgt900jz-8000.inc1.devtunnels.ms";
-// const url = "https://sn34t60d-8000.inc1.devtunnels.ms";
-
 const url = import.meta.env.VITE_API_URL;
 
+// const url = import.meta.env.VITE_API_URL;
 
 
 
@@ -16,6 +15,7 @@ const url = import.meta.env.VITE_API_URL;
 export async function products() {
 
   try {
+    console.log(url);
     const response = await fetch(`${url}/products`);
     
     if (!response.ok) {
