@@ -1,7 +1,5 @@
 import { NavLink } from "react-router-dom";
 
-
-
 export default function NavItems({ showCategory }) {
     return (
         <div
@@ -14,8 +12,8 @@ export default function NavItems({ showCategory }) {
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-2 border-b-3 border-[#f54952] transition duration-300 ease-in-out rounded-sm"
-                        : "px-2 "
+                        ? "h-full flex items-center px-3 border-b-4 border-[#dca848] transition duration-300 ease-in-out rounded-sm"
+                        : "px-3 h-full flex items-center"
                 }
                 to={"/"}
             >
@@ -25,8 +23,8 @@ export default function NavItems({ showCategory }) {
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-2 border-b-3 border-[#f54952] transition duration-300 ease-in-out rounded-sm"
-                        : "px-2 "
+                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] transition duration-300 ease-in-out rounded-sm"
+                        : "px-3 h-full flex items-center"
                 }
                 to={"/shop"}
             >
@@ -36,8 +34,8 @@ export default function NavItems({ showCategory }) {
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-2 border-b-3 border-[#f54952] transition duration-300 ease-in-out rounded-sm"
-                        : "px-2 "
+                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] transition duration-300 ease-in-out rounded-sm"
+                        : "px-3 h-full flex items-center"
                 }
                 to={"/contacts"}
             >

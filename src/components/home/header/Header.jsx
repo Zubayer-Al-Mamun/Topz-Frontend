@@ -10,7 +10,7 @@ export default function Header({ showCategory, setShowSideNavbar }) {
     // const scrollValue = false;
 
     return (
-        <div className="w-full flex flex-col justify-center items-center h-[60px] fixed z-10">
+        <div className="w-full flex flex-col justify-center items-center h-[60px] fixed z-10 text-white text-[18px]">
             <div className="h-[60px] w-full relative overflow-hidden">
 
                 <img className="object-cover absolute -z-10 max-sm:hidden" src={bg_lg} alt="" />

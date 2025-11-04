@@ -15,6 +15,7 @@ import PrivateRoute from "./components/PrivateRoute"; // ✅ import this
 import "./index.css";
 import { product, products } from "./loader/loader";
 import Login from "./components/adminPanel/login";
+import ContactUs from "./components/contacts/ContactUs";
 
 const router = createBrowserRouter([
     {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
             },
             {
                 path: "contacts",
-                element: <div>This route is under Construction</div>,
+                element: <ContactUs/>,
             },
             {
                 path : "login",

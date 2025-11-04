@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
+import messengerIcon from "../assets/messenger.svg";
+import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
-import { useRef } from "react";
-import { useEffect } from "react";
+import WhatsappIcon from "../assets/whatsapp.svg";
+import ImagePreview from "./ImagePreview";
 
 export default function SingleProduct() {
     const [selectedColor, setSelectedColor] = useState("maroon");
@@ -12,14 +14,26 @@ export default function SingleProduct() {
     const [showFullDesc, setShowFullDesc] = useState(false);
     const hasFetched = useRef(false);
 
+    const imageUrls = [
+    "https://picsum.photos/500/300",
+    "https://picsum.photos/500/500",
+    "https://picsum.photos/500/700",
+    "https://picsum.photos/500/700",
+    "https://picsum.photos/500/700",
+    "https://picsum.photos/500/300",
+    "https://picsum.photos/500/500",
+    "https://picsum.photos/500/700",
+    "https://picsum.photos/500/700",
+    "https://picsum.photos/500/700"
+  ];
+
     const product = useLoaderData();
-    console.log(product);
+
     const colors = [
         { name: "maroon", hex: "#4A1C1C" },
         { name: "green", hex: "#8BAE5E" },
         { name: "yellow", hex: "#E1C340" },
     ];
-
 
     useEffect(() => {
         if (!hasFetched.current) {
@@ -32,64 +46,18 @@ export default function SingleProduct() {
         }
     }, [product._id]);
 
-
     useEffect(() => {
         window.scrollTo(0, 0);
-    })
+    });
     return (
         <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center ">
             {/* Container */}
             <div className="w-full sm:p-8 grid grid-cols-1 md:grid-cols-2">
                 {/* Left - Images */}
                 <div>
-                    <img
-                        src={product.vars[0].imageUrl[0]}
-                        alt="Main Shoe"
-                        className="w-full h-auto object-contain mb-4"
-                    />
-
-                    <div className="flex gap-3 bg-green-300">
-                        {/* {product.vars.map((variant, i) =>
-                            variant.map((img, j) => (
-                                <div key={i + j}
-                                    // key={`${i}+${j}`}
-                                    className="w-20 h-20 border bg-red-500 rounded-lg p-1 hover:border-black cursor-pointer"
-                                >
-                                    <img
-                                        src={img}
-                                        // alt={`Thumbnail ${i + 1}-${j + 1}`}
-                                        className="w-full border-2 h-full object-contain rounded"
-                                    />
-                                </div>
-                            ))
-                        )} */}
-
-                        {/* {product.vars.map((var, i) => (
-
-                            var.map((img, j) => (
-                                <h1>hi</h1>
-                            ))
-
-
-
-
-
-
-
-
-                            // <div
-                            //     key={i}
-                            //     className="w-20 h-20 border bg-red-500 rounded-lg p-1 hover:border-black cursor-pointer"
-                            // >
-                            //     <img
-                            //         src={vars.imageUrl[0]}
-                            //         alt={`Thumbnail ${i + 1}`}
-                            //         className="w-full border-2 h-full object-contain rounded"
-                            //     />
-                            // </div>
-                        ))} */}
-                    </div>
+                    <ImagePreview images={imageUrls} />
                 </div>
+                
 
                 {/* Right - Product Info */}
                 <div className="flex flex-col p-2 sm:px-3">
@@ -184,9 +152,6 @@ export default function SingleProduct() {
                         </div>
                     )}
 
-
-
-
                     {/* Colors */}
                     {/* <div className="mb-4">
                         <p className="font-semibold mb-2">Colors</p>
@@ -250,12 +215,52 @@ export default function SingleProduct() {
                     </div> */}
 
                     <div className=" bg-[#F8F8F0] flex justify-between items-center py-1 max-md:hidden ">
-                        <a
-                            href="tel:+8801602369203"
-                            className=" text-[14px] p-2 border  rounded-lg"
-                        >
-                            📞 Call Now
-                        </a>
+                        <div className="flex">
+                            <a
+                                href="tel:+8801602369203"
+                                className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400 "
+                            >
+                                <img
+                                    src={phoneIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+
+                                <div className="text-white hidden group-hover:inline -top-[10px] pt-1 px-1">
+                                    Phone
+                                </div>
+                            </a>
+
+                            <a
+                                href="https://wa.me/+8801602369203"
+                                className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
+                            >
+                                <img
+                                    src={WhatsappIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+
+                                <div className="text-white hidden group-hover:inline -top-[10px] pt-1 px-1">
+                                    Whatsapp
+                                </div>
+                            </a>
+
+                            {/* <a
+                                href="https://m.me/61580630246411"
+                                className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
+                            >
+                                <img
+                                    src={messengerIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+
+                                <div className="text-white hidden group-hover:inline -top-[10px] pt-1 px-1">
+                                    Messanger
+                                </div>
+                            </a> */}
+                        </div>
                         <div className=" flex text-[14px] items-center h-[45px]">
                             <button className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
                                 Add to Cart
@@ -269,12 +274,40 @@ export default function SingleProduct() {
 
                     {/* Buttons */}
                     <div className=" fixed bottom-0 left-0 right-0 bg-[#F8F8F0] flex justify-between items-center py-1 shadow md:hidden ">
-                        <a
-                            href="tel:+8801602369203"
-                            className=" text-[14px] p-2 border ml-2 rounded-lg"
-                        >
-                            📞 Call Now
-                        </a>
+                        <div className="flex">
+                            <a
+                                href={`tel:${import.meta.env.VITE_CONTACT_PHONE}`}
+                                className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
+                            >
+                                <img
+                                    src={phoneIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+                            </a>
+                                    
+                            <a
+                                href={`https://wa.me/${import.meta.envVITE_CONTACT_WHATS}`}
+                                className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
+                            >
+                                <img
+                                    src={WhatsappIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+                            </a>
+
+                            {/* <a
+                                href="https://m.me/61580630246411"
+                                className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
+                            >
+                                <img
+                                    src={messengerIcon}
+                                    className="h-[30px]"
+                                    alt=""
+                                />
+                            </a> */}
+                        </div>
                         <div className=" flex text-[14px] items-center h-[45px]">
                             <button className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
                                 Add to Cart
@@ -290,3 +323,4 @@ export default function SingleProduct() {
         </div>
     );
 }
+
