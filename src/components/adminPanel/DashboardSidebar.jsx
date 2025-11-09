@@ -10,6 +10,7 @@ export default function DashboardSidebar({setShowDashboardSidebar}) {
             onClick={handleSidebar}>
             <nav className="bg-[#d9c4b0] flex-1 p-4 mt-[60px]">
                 <ul className="space-y-2 flex flex-col">
+                    <NavLink className="px-3 py-2 rounded-lg hover:bg-indigo-100 cursor-pointer" to="/admin">Dashboard</NavLink>
                     {[
                         "Products",
                         "NewProduct",

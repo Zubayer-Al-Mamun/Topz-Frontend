@@ -4,7 +4,7 @@ import star_y from "../assets/starYellow.svg";
 
 export default function Product({ product }) {
 
-
+console.log(product);
 
 
     
@@ -16,7 +16,7 @@ export default function Product({ product }) {
             {/* Main Image */}
             <div className=" w-full flex justify-center">
                 <img
-                    src={product.vars[0].imageUrl[0]}
+                    src={product.images[0]}
                     alt="Nike Air Max 270"
                     className="w-full object-cover max-sm:h-[180px] sm:h-[180px]"
                     loading="lazy"

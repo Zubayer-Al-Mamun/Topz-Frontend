@@ -1,8 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Outlet, useNavigation } from "react-router-dom";
 import Header from "./home/header/Header";
 import SideNavbar from "./home/SideNavbar";
-import Loading from "./Loading";
 // import bg from "../assets/leather_black.png"
 
 export default function Page() {
@@ -11,16 +10,14 @@ export default function Page() {
     const [showCategory, setShowCategory] = useState(true);
     const scrollRef = useRef(0);
 
+    //     useEffect(() => {
+    //     // Page load এর পর একটু scroll করানো হয়
+    //     const timer = setTimeout(() => {
+    //       window.scrollTo(0, 200); // Chrome header hide করে
+    //     }, 300);
 
-
-//     useEffect(() => {
-//     // Page load এর পর একটু scroll করানো হয়
-//     const timer = setTimeout(() => {
-//       window.scrollTo(0, 200); // Chrome header hide করে
-//     }, 300);
-
-//     return () => clearTimeout(timer);
-//   }, []);
+    //     return () => clearTimeout(timer);
+    //   }, []);
 
     return (
         <>
@@ -36,11 +33,9 @@ export default function Page() {
                     }
                 }}
             >
-                
                 {/* <div className="h-[100vh] absolute flex justify-baseline w-full">
                     {navigation.state === "loading" && <Loading />}
                 </div> */}
-
 
                 <Header
                     setShowSideNavbar={setShowSideNavbar}
@@ -55,7 +50,7 @@ export default function Page() {
                     {navigation.state === "loading" && <Loading />} */}
 
                     <div className=" h-full w-full flex flex-col items-center relative bg-[#F8F8F0]">
-                       <Outlet />
+                        <Outlet />
                     </div>
                 </div>
             </div>

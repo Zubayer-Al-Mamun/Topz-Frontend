@@ -1,10 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
-import messengerIcon from "../assets/messenger.svg";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
-import ImagePreview from "./ImagePreview";
 
 export default function SingleProduct() {
     const [selectedColor, setSelectedColor] = useState("maroon");
@@ -13,27 +11,16 @@ export default function SingleProduct() {
     const [showFullTitle, setShowFullTitle] = useState(false);
     const [showFullDesc, setShowFullDesc] = useState(false);
     const hasFetched = useRef(false);
+    const [fullImage, setFullImage] = useState(null);
 
-    const imageUrls = [
-    "https://picsum.photos/500/300",
-    "https://picsum.photos/500/500",
-    "https://picsum.photos/500/700",
-    "https://picsum.photos/500/700",
-    "https://picsum.photos/500/700",
-    "https://picsum.photos/500/300",
-    "https://picsum.photos/500/500",
-    "https://picsum.photos/500/700",
-    "https://picsum.photos/500/700",
-    "https://picsum.photos/500/700"
-  ];
+    // const [selected, setSelected] = useState(images[0]);
 
     const product = useLoaderData();
+    const images = product.images;
+    const [selected, setSelected] = useState(images[0])
+    console.log(images);
 
-    const colors = [
-        { name: "maroon", hex: "#4A1C1C" },
-        { name: "green", hex: "#8BAE5E" },
-        { name: "yellow", hex: "#E1C340" },
-    ];
+    console.log(product);
 
     useEffect(() => {
         if (!hasFetched.current) {
@@ -50,17 +37,75 @@ export default function SingleProduct() {
         window.scrollTo(0, 0);
     });
     return (
-        <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center ">
-            {/* Container */}
-            <div className="w-full sm:p-8 grid grid-cols-1 md:grid-cols-2">
-                {/* Left - Images */}
-                <div>
-                    <ImagePreview images={imageUrls} />
-                </div>
-                
+        <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center relative">
+            <div
+                className={
+                    fullImage
+                        ? "absolute flex items-center flex-col justify-center z-50 top-0 left-0 right-0 h-[100vh] bg-white pb-[80px]"
+                        : "hidden"
+                }
+                onClick={() => setFullImage(null)}
+            >
+                <p className="font-semibold">Tap to close</p>
+                <img src={fullImage} className="w-full" alt="" />
+                <p className="font-semibold">Tap to close</p>
+            </div>
 
-                {/* Right - Product Info */}
-                <div className="flex flex-col p-2 sm:px-3">
+            <div className="w-full sm:p-4 grid grid-cols-1 md:grid-cols-2">
+                <div className="flex max-sm:items-center sm:flex-col sm:items-center">
+                    <div
+                        className="w-4/5 md:w-[300px] md:h-[300px] aspect-square ml-2 mt-2 rounded-lg"
+                        onClick={() => setFullImage(selected)}
+                    >
+                        <img
+                            src={selected}
+                            alt="Selected"
+                            className=" h-full w-full rounded-lg object-cover"
+                        />
+                    </div>
+
+                    <div className="sm:hidden max-sm:w-[20%] h-[250px] border border-gray-400 rounded-md flex flex-col items-center gap-2 overflow-x-hidden p-1 m-1 relative">
+                        {images.map((img, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setSelected(img)}
+                                className={`border-2 rounded-lg ${
+                                    selected === img
+                                        ? "border-blue-500"
+                                        : "border-gray-300"
+                                }`}
+                            >
+                                <img
+                                    src={img}
+                                    alt={`thumb-${idx}`}
+                                    className="w-15 h-15 rounded-md shring-0 object-cover"
+                                />
+                            </button>
+                        ))}
+                    </div>
+
+                    <div className="max-sm:hidden m-4 w-[250px] rounded-md border border-gray-400 p-2 flex gap-2 overflow-x-auto">
+                        {images.map((img, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setSelected(img)}
+                                className={`flex-shrink-0 w-12 h-12 rounded-lg ${
+                                    selected === img
+                                        ? "border-blue-500 border-2"
+                                        : "border-gray-300"
+                                }`}
+                            >
+                                <img
+                                    src={img}
+                                    alt={`thumb-${idx}`}
+                                    className="object-cover rounded-lg w-full h-full"
+                                />
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-col p-2 md:p-3 sm:px-3">
                     {/* <div className="flex items-center gap-2 mb-2">
                         <div className="text-yellow-500">★★★★★</div>
                         <p className="text-gray-500 text-sm">(256)</p>
@@ -83,14 +128,14 @@ export default function SingleProduct() {
                     {showFullTitle ? (
                         <div
                             onClick={() => setShowFullTitle(!showFullTitle)}
-                            className="text-[16px] font-bold m-1 "
+                            className="text-[16px] font-bold "
                         >
                             {product.title}
                         </div>
                     ) : (
                         <div
                             onClick={() => setShowFullTitle(!showFullTitle)}
-                            className="text-[16px] font-bold m-1 line-clamp-2"
+                            className="text-[16px] font-bold line-clamp-2"
                         >
                             {product.title}{" "}
                         </div>
@@ -131,7 +176,6 @@ export default function SingleProduct() {
                         </Link>
                     </div>
 
-                    {/* Description */}
 
                     {showFullDesc ? (
                         <div
@@ -272,11 +316,12 @@ export default function SingleProduct() {
                         </div>
                     </div>
 
-                    {/* Buttons */}
                     <div className=" fixed bottom-0 left-0 right-0 bg-[#F8F8F0] flex justify-between items-center py-1 shadow md:hidden ">
                         <div className="flex">
                             <a
-                                href={`tel:${import.meta.env.VITE_CONTACT_PHONE}`}
+                                href={`tel:${
+                                    import.meta.env.VITE_CONTACT_PHONE
+                                }`}
                                 className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -285,9 +330,11 @@ export default function SingleProduct() {
                                     alt=""
                                 />
                             </a>
-                                    
+
                             <a
-                                href={`https://wa.me/${import.meta.envVITE_CONTACT_WHATS}`}
+                                href={`https://wa.me/${
+                                    import.meta.envVITE_CONTACT_WHATS
+                                }`}
                                 className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -320,7 +367,14 @@ export default function SingleProduct() {
                     </div>
                 </div>
             </div>
+
+            <div className="w-full sm:p-4 grid grid-cols-1 md:grid-cols-2">
+                <div className="flex max-sm:items-center sm:flex-col sm:items-center">
+                    <div>
+                        <h1 className="text-[20px]">Ratings & Reviews</h1>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }
-
