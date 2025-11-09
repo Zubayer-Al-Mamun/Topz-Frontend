@@ -22,7 +22,7 @@ export default function AdminProducts() {
                     <div className="h-full flex">
                         <img
                             className="h-full w-[100px] object-cover "
-                            src={product.vars[0].imageUrl[0]}
+                            src={product.images[0]}
                             alt=""
                         />
                         <div className="m-2">

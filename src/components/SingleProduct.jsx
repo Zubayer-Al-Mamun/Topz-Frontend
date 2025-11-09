@@ -5,9 +5,6 @@ import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
 
 export default function SingleProduct() {
-    const [selectedColor, setSelectedColor] = useState("maroon");
-    const [quantity, setQuantity] = useState(1);
-    const [size, setSize] = useState(42);
     const [showFullTitle, setShowFullTitle] = useState(false);
     const [showFullDesc, setShowFullDesc] = useState(false);
     const hasFetched = useRef(false);
@@ -17,7 +14,7 @@ export default function SingleProduct() {
 
     const product = useLoaderData();
     const images = product.images;
-    const [selected, setSelected] = useState(images[0])
+    const [selected, setSelected] = useState(images[0]);
     console.log(images);
 
     console.log(product);
@@ -175,7 +172,6 @@ export default function SingleProduct() {
                             <p className="font-semibold">৳ 130</p>
                         </Link>
                     </div>
-
 
                     {showFullDesc ? (
                         <div
