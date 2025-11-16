@@ -1,18 +1,14 @@
 import { NavLink } from "react-router-dom";
 
-export default function NavItems({ showCategory }) {
+export default function NavItems(){
     return (
         <div
-            className={
-                showCategory
-                    ? "max-sm:hidden h-full flex items-center"
-                    : "max-sm:hidden h-full hidden items-center"
-            }
+            className="max-sm:hidden h-full flex items-center"
         >
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-3 border-b-4 border-[#dca848] transition duration-300 ease-in-out rounded-sm"
+                        ? "h-full flex items-center px-3 border-b-4 border-[#dca848] text-[#dca848] transition duration-300 ease-in-out rounded-sm"
                         : "px-3 h-full flex items-center"
                 }
                 to={"/"}
@@ -23,7 +19,7 @@ export default function NavItems({ showCategory }) {
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] transition duration-300 ease-in-out rounded-sm"
+                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] text-[#dca848] transition duration-300 ease-in-out rounded-sm"
                         : "px-3 h-full flex items-center"
                 }
                 to={"/shop"}
@@ -34,7 +30,7 @@ export default function NavItems({ showCategory }) {
             <NavLink
                 className={({ isActive }) =>
                     isActive
-                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] transition duration-300 ease-in-out rounded-sm"
+                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] text-[#dca848] transition duration-300 ease-in-out rounded-sm"
                         : "px-3 h-full flex items-center"
                 }
                 to={"/contacts"}

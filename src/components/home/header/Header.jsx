@@ -6,7 +6,7 @@ import Logo from "./Logo";
 import Menu from "./Menu";
 import NavItems from "./NavItems";
 
-export default function Header({ showCategory, setShowSideNavbar }) {
+export default function Header({ setShowSideNavbar }) {
     // const scrollValue = false;
 
     return (
@@ -20,17 +20,7 @@ export default function Header({ showCategory, setShowSideNavbar }) {
                     <Menu setShowSideNavbar={setShowSideNavbar} />
                     <Logo />
 
-                    <NavItems showCategory={showCategory} />
-
-                    <div
-                        className={
-                            showCategory
-                                ? "max-sm:hidden h-[45px] hidden justify-center items-center"
-                                : "max-sm:hidden h-[45px] flex justify-center items-center"
-                        }
-                    >
-                        <Bar />
-                    </div>
+                    <NavItems />
 
                     <Cart />
                 </div>

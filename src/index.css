@@ -19,5 +19,25 @@
 }
 
 .categorie::-webkit-scrollbar {
-      display: none; /* Hides the scrollbar */
+      width: 0px; /* Hides the scrollbar */
     }
+
+    .single_product_popup::-webkit-scrollbar {
+      /* display: none; */
+      width: 0px;
+    }
+
+
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.popup {
+  animation: slideUp 0.3s ease-out forwards;
+}

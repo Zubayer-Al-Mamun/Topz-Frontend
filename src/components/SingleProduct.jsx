@@ -1,23 +1,22 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
+import Popup from "./PopUp";
+
 
 export default function SingleProduct() {
     const [showFullTitle, setShowFullTitle] = useState(false);
     const [showFullDesc, setShowFullDesc] = useState(false);
     const hasFetched = useRef(false);
     const [fullImage, setFullImage] = useState(null);
-
-    // const [selected, setSelected] = useState(images[0]);
+    const [showPopup, setShowPopup] = useState(false);
 
     const product = useLoaderData();
     const images = product.images;
     const [selected, setSelected] = useState(images[0]);
-    console.log(images);
 
-    console.log(product);
 
     useEffect(() => {
         if (!hasFetched.current) {
@@ -73,7 +72,10 @@ export default function SingleProduct() {
                                 }`}
                             >
                                 <img
-                                    src={img}
+                                    src={img.replace(
+                                        "/upload/",
+                                        "/upload/w_200/"
+                                    )}
                                     alt={`thumb-${idx}`}
                                     className="w-15 h-15 rounded-md shring-0 object-cover"
                                 />
@@ -93,7 +95,10 @@ export default function SingleProduct() {
                                 }`}
                             >
                                 <img
-                                    src={img}
+                                    src={img.replace(
+                                        "/upload/",
+                                        "/upload/w_200/"
+                                    )}
                                     alt={`thumb-${idx}`}
                                     className="object-cover rounded-lg w-full h-full"
                                 />
@@ -110,7 +115,11 @@ export default function SingleProduct() {
 
                     <div className="flex items-baseline-last gap-2 mb-3">
                         <p className="text-2xl text-red-500 font-bold">
-                            ৳ {product.discountsPrice}
+                            ৳{" "}
+                            {Math.ceil(
+                                product.pricing *
+                                    (1 - product.discountsPercentage / 100)
+                            )}
                         </p>
                         <span className="text-[12px] line-through font-semibold text-gray-500">
                             {" "}
@@ -192,67 +201,7 @@ export default function SingleProduct() {
                         </div>
                     )}
 
-                    {/* Colors */}
-                    {/* <div className="mb-4">
-                        <p className="font-semibold mb-2">Colors</p>
-                        <div className="flex gap-3">
-                            {colors.map((color) => (
-                                <button
-                                    key={color.name}
-                                    onClick={() => setSelectedColor(color.name)}
-                                    className={`w-8 h-8 rounded-full border-2 ${
-                                        selectedColor === color.name
-                                            ? "border-black"
-                                            : "border-gray-300"
-                                    }`}
-                                    style={{ backgroundColor: color.hex }}
-                                ></button>
-                            ))}
-                        </div>
-                    </div> */}
-
                     <div className="h-[60px] sm:hidden"></div>
-
-                    {/* Quantity & Size */}
-                    {/* <div className="flex items-center gap-10 mb-6">
-
-                        <div>
-                            <p className="font-semibold mb-2">Quantity</p>
-                            <div className="flex items-center border rounded-lg overflow-hidden">
-                                <button
-                                    onClick={() =>
-                                        setQuantity(Math.max(1, quantity - 1))
-                                    }
-                                    className="px-3 py-1 text-xl hover:bg-gray-100"
-                                >
-                                    −
-                                </button>
-                                <span className="px-4">{quantity}</span>
-                                <button
-                                    onClick={() => setQuantity(quantity + 1)}
-                                    className="px-3 py-1 text-xl hover:bg-gray-100"
-                                >
-                                    +
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <p className="font-semibold mb-2">Size (UK)</p>
-                            <select
-                                value={size}
-                                onChange={(e) => setSize(e.target.value)}
-                                className="border rounded-lg px-3 py-2"
-                            >
-                                {[39, 40, 41, 42, 43, 44].map((s) => (
-                                    <option key={s}>{s}</option>
-                                ))}
-                            </select>
-                            <p className="text-blue-600 text-sm mt-1 hover:underline cursor-pointer">
-                                Size Guide
-                            </p>
-                        </div>
-                    </div> */}
 
                     <div className=" bg-[#F8F8F0] flex justify-between items-center py-1 max-md:hidden ">
                         <div className="flex">
@@ -285,27 +234,17 @@ export default function SingleProduct() {
                                     Whatsapp
                                 </div>
                             </a>
-
-                            {/* <a
-                                href="https://m.me/61580630246411"
-                                className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
-                            >
-                                <img
-                                    src={messengerIcon}
-                                    className="h-[30px]"
-                                    alt=""
-                                />
-
-                                <div className="text-white hidden group-hover:inline -top-[10px] pt-1 px-1">
-                                    Messanger
-                                </div>
-                            </a> */}
                         </div>
                         <div className=" flex text-[14px] items-center h-[45px]">
                             <button className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
                                 Add to Cart
                             </button>
-                            <button className="ml-2 font-bold text-white  border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:bg-gray-100 transition">
+                            <button
+                                className="ml-2 font-bold text-white   border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
+                                onClick={() => {
+                                    setShowPopup(true);
+                                }}
+                            >
                                 Buy Now
                                 <br /> ৳ {product.pricing}
                             </button>
@@ -339,23 +278,17 @@ export default function SingleProduct() {
                                     alt=""
                                 />
                             </a>
-
-                            {/* <a
-                                href="https://m.me/61580630246411"
-                                className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
-                            >
-                                <img
-                                    src={messengerIcon}
-                                    className="h-[30px]"
-                                    alt=""
-                                />
-                            </a> */}
                         </div>
                         <div className=" flex text-[14px] items-center h-[45px]">
                             <button className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
                                 Add to Cart
                             </button>
-                            <button className="mx-2 font-bold text-white  border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:bg-gray-100 transition">
+                            <button
+                                className="mx-2 font-bold text-white  border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
+                                onClick={() => {
+                                    setShowPopup(true);
+                                }}
+                            >
                                 Buy Now
                                 <br /> ৳ {product.pricing}
                             </button>
@@ -371,6 +304,9 @@ export default function SingleProduct() {
                     </div>
                 </div>
             </div>
+
+            {/* popup */}
+            {showPopup && <Popup product={product} setShowPopup={setShowPopup} />}
         </div>
     );
 }

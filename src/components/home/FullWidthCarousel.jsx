@@ -74,7 +74,7 @@ export default function FullWidthCarousel({
     return (
         <div
             ref={containerRef}
-            className={`w-full relative overflow-hidden ${className}`}
+            className={`w-full mt-2 sm:rounded-lg relative overflow-hidden ${className}`}
             onMouseEnter={onMouseEnter}
             onMouseLeave={onMouseLeave}
             onTouchStart={onTouchStart}

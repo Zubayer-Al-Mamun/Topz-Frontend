@@ -73,8 +73,9 @@ export default function Home() {
                 ))}
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 bg-[#24344c] flex justify-around items-center py-2 border-t md:hidden">
-                <button>🏠</button>
+            <div className="fixed bottom-0 left-0 right-0 bg-[#24344c] flex justify-around items-center py-2 border-t sm:hidden">
+
+                <button> 🏠 Home</button>
                 <button>💗</button>
                 <button className="bg-blue-500 text-white rounded-full p-4 -mt-8 shadow-lg">
                     🛒

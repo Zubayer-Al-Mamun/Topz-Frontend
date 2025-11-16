@@ -41,7 +41,7 @@ console.log(product);
 
                 <div className="flex justify-between">
                     <p className="font-bold text-[#3aa136]">
-                        ৳{product.pricing}
+                        ৳{Math.ceil(product.pricing * (1 - product.discountsPercentage / 100))}
                         <span className="text-[12px] p-[0px] m-[0px] text-red-500">
                             -{product.discountsPercentage + "%"}
                         </span>
