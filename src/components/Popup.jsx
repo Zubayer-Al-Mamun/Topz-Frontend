@@ -1,10 +1,10 @@
-import { useState } from "react";
+// import { useState } from "react";
 import crossIcon from "../assets/cross_gray.svg";
 
 export default function PopUp({ product, setShowPopup }) {
-    const [order, setOrder] = useState({
-        productId: product._id,
-    });
+    // const [order, setOrder] = useState({
+    //     productId: product._id,
+    // });
 
     return (
         <div className=" sm:hidden fixed h-full w-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 z-20">

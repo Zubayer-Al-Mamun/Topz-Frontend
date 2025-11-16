@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
-import PopUp from "./PopUp"
+import PopUp from "./PopUp";
 
 
 export default function SingleProduct() {
@@ -310,7 +310,7 @@ export default function SingleProduct() {
             </div>
 
             {/* popup */}
-            {showPopup && <PopUp product={product} setShowPopup={setShowPopup} />}
+            {showPopup && <PopUp product={product} setShowPopup={setShowPopup}/>}
 
             
         </div>
