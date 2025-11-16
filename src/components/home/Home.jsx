@@ -8,7 +8,6 @@ import FullWidthCarousel from "./FullWidthCarousel";
 
 export default function Home() {
     const products = useLoaderData();
-    console.log(products);
 
     // const products = [...products_data].sort(() => Math.random() - 0.5);
 

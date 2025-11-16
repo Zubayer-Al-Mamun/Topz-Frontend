@@ -3,10 +3,6 @@ import { NavLink } from "react-router-dom";
 import star_y from "../assets/starYellow.svg";
 
 export default function Product({ product }) {
-
-console.log(product);
-
-
     
     return (
         <NavLink

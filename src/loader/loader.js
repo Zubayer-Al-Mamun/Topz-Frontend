@@ -11,7 +11,6 @@ const url = import.meta.env.VITE_API_URL;
 export async function products() {
 
   try {
-    console.log(url);
     const response = await fetch(`${url}/products`);
     
     if (!response.ok) {
@@ -37,8 +36,7 @@ export async function product({params}) {
     if(!response.ok){
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const data = await response.json(); // Parse JSON
-    console.log("auto call");
+    const data = await response.json();
     return data;
 
   }catch(err){

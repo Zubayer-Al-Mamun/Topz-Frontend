@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
-import CartProvider from "../context/cartContext";
+import CartProvider from "../context/CartProvider";
 import Header from "./home/header/Header";
 import SideNavbar from "./home/SideNavbar";
 
