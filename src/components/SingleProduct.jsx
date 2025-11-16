@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
-import PopUp from "./PopUp";
+import PopUp from "./PopUp.jsx";
 
 
 export default function SingleProduct() {
