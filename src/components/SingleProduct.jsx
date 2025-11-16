@@ -3,7 +3,7 @@ import { Link, useLoaderData } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
-import Popup from "./PopUp";
+import PopUp from "./PopUp"
 
 
 export default function SingleProduct() {
@@ -31,7 +31,7 @@ export default function SingleProduct() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    });
+    },[]);
     return (
         <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center relative">
             <div
@@ -206,7 +206,9 @@ export default function SingleProduct() {
                     <div className=" bg-[#F8F8F0] flex justify-between items-center py-1 max-md:hidden ">
                         <div className="flex">
                             <a
-                                href="tel:+8801602369203"
+                                href={`tel:${
+                                    import.meta.env.VITE_CONTACT_PHONE
+                                }`}
                                 className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400 "
                             >
                                 <img
@@ -221,7 +223,9 @@ export default function SingleProduct() {
                             </a>
 
                             <a
-                                href="https://wa.me/+8801602369203"
+                                href={`https://wa.me/${
+                                    import.meta.env.VITE_CONTACT_WHATS
+                                }`}
                                 className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -268,7 +272,7 @@ export default function SingleProduct() {
 
                             <a
                                 href={`https://wa.me/${
-                                    import.meta.envVITE_CONTACT_WHATS
+                                    import.meta.env.VITE_CONTACT_WHATS
                                 }`}
                                 className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
@@ -306,7 +310,9 @@ export default function SingleProduct() {
             </div>
 
             {/* popup */}
-            {showPopup && <Popup product={product} setShowPopup={setShowPopup} />}
+            {showPopup && <PopUp product={product} setShowPopup={setShowPopup} />}
+
+            
         </div>
     );
 }

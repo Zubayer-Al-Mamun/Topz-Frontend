@@ -1,7 +1,7 @@
 import { useState } from "react";
 import crossIcon from "../assets/cross_gray.svg";
 
-export default function Popup({ product, setShowPopup }) {
+export default function PopUp({ product, setShowPopup }) {
     const [order, setOrder] = useState({
         productId: product._id,
     });
