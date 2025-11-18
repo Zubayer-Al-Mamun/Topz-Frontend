@@ -21,27 +21,29 @@ export default function AdminProducts() {
                 >
                     <div className="h-full flex">
                         <img
-                            className="h-full w-[100px] object-cover "
+                            className="h-[100px] w-[100px] object-cover shrink-0 "
                             src={product.images[0]}
                             alt=""
                         />
                         <div className="m-2">
                             <p className="line-clamp-1 font-bold">{product.title}</p>
-                            <p className="font-semibold text-[11px]">Total Sale : {product.totalSale}</p>
-                            <p className="font-semibold text-[11px]">Total Sale : {product.totalView}</p>
+                            <p className="font-semibold text-[11px]">Sale : {product.totalSale}</p>
+                            <p className="font-semibold text-[11px]">View : {product.totalView}</p>
                         </div>
                     </div>
 
-                    <div className=" h-full flex items-center">
+                    <div className=" h-full flex items-center text-[11px]">
                         <Link
-                            to={`/admin/products/${product.productId}`}
-                            className="p-1 m-1 border rounded-lg bg-gray-300"
+                            to={`/admin/products/addcolor/${product._id}`}
+                            className="p-1 py-2 m-1 border rounded-lg bg-gray-300"
                         >
                             {" "}
-                            Edit Product
+                            Add Color
                         </Link>
-                        <Link className="p-1 m-1 border rounded-lg bg-gray-300">
-                            Delete Product
+                        <Link
+                            to={`/admin/products/${product._id}`}
+                            className="p-1 py-2 m-1 border rounded-lg bg-gray-300">
+                            Edit
                         </Link>
                     </div>
                 </div>

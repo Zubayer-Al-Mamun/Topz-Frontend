@@ -29,6 +29,8 @@ export default function ProductForm() {
 
         const data = new FormData();
 
+        
+
         Object.entries(formData).forEach(([key, value]) => {
             if (key === "images") {
                 value.forEach((file) => data.append("images", file)); 

@@ -16,6 +16,7 @@ import "./index.css";
 import { product, products } from "./loader/loader";
 import Login from "./components/adminPanel/login";
 import ContactUs from "./components/contacts/ContactUs";
+import AddColor from "./components/adminPanel/AddColor";
 
 const router = createBrowserRouter([
     {
@@ -65,6 +66,10 @@ const router = createBrowserRouter([
                         path: "products",
                         element: <AdminProducts />,
                         loader: products,
+                    },
+                    {
+                        path: "products/addcolor/:productId",
+                        element: <AddColor/>
                     },
                     {
                         path: "products/:productId",

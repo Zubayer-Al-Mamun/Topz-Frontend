@@ -7,7 +7,7 @@ export default function PopUp({ product, setShowPopup }) {
     // });
 
     return (
-        <div className=" sm:hidden fixed h-full w-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 z-20">
+        <div className="fixed h-full w-full backdrop-blur-sm top-0 bottom-0 left-0 right-0 z-20 flex justify-center">
 
 
             <div className="popup fixed bg-white w-full bottom-0 p-2 md:w-2/3 md:rounded-t-md shadow-[5px_2px_20px_5px_rgb(0,0,0)] z-20">

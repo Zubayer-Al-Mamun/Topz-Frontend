@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import CartProvider from "../context/CartProvider";
 import Header from "./home/header/Header";
 import SideNavbar from "./home/SideNavbar";
+import BottomNavbar from "./home/bottom_nav/BottomNavbar";
 
 export default function Page() {
     const [showSideNavbar, setShowSideNavbar] = useState(false);

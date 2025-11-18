@@ -1,17 +1,15 @@
-import Product from "../Product";
-// import bannar from "../../assets/bannar.png"
-import "./home.css";
-
-// import bannar from "../../assets/bannar.png";
 import { useLoaderData } from "react-router-dom";
+import Product from "../Product";
 import FullWidthCarousel from "./FullWidthCarousel";
+import "./home.css";
+import BottomNavbar from "./bottom_nav/BottomNavbar";
 
 export default function Home() {
     const products = useLoaderData();
 
     // const products = [...products_data].sort(() => Math.random() - 0.5);
 
-    const categories = ["Shirt", "T-Shirt","Hoodie", "Drop Shoulder",  ];
+    const categories = ["Shirt", "T-Shirt", "Hoodie", "Drop Shoulder"];
     // console.log(products);
 
     const slides = [
@@ -71,17 +69,7 @@ export default function Home() {
                     <Product key={idx} product={product} />
                 ))}
             </div>
-
-            <div className="fixed bottom-0 left-0 right-0 bg-[#24344c] flex justify-around items-center py-2 border-t sm:hidden">
-
-                <button> 🏠 Home</button>
-                <button>💗</button>
-                <button className="bg-blue-500 text-white rounded-full p-4 -mt-8 shadow-lg">
-                    🛒
-                </button>
-                <button>🔔</button>
-                <button>👤</button>
-            </div>
+            <BottomNavbar/>
         </div>
     );
 }
