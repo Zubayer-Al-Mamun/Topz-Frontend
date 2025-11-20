@@ -51,22 +51,11 @@ export default function PopUp({ product, setShowPopup }) {
                     </div>
                 </div>
 
-                <div className="single_product_popup max-h-[200px] overflow-x-hidden py-2">
+                <div className="single_product_popup max-h-[200px] overflow-x-hidden scroll-py-2.5">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Ipsam corrupti, nihil consectetur quisquam aut eligendi
                     nisi. Iure, fuga quis adipisci eligendi nesciunt quidem,
-                    dolore perspiciatis cupiditate alias consequatur nihil
-                    et?Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Facilis libero perferendis necessitatibus provident sed
-                    perspiciatis hic possimus, nostrum placeat iusto laborum
-                    facere, praesentium similique. Quas quibusdam dolores
-                    ratione iste similique. Lorem ipsum dolor sit amet
-                    consectetur adipisicing elit. Quam est dolorem a, eum
-                    sapiente corporis autem labore, veniam doloremque ratione
-                    quasi esse, nostrum necessitatibus ad eius veritatis
-                    perferendis quia adipisci. Lorem ipsum, dolor sit amet
-                    consectetur adipisicing elit. Cupiditate, aperiam in optio
-                    repudiandae officiis necessitatibus explicabo accusantium
+                    dolore perspiciatis cupiditate alias consequatur nihi
                     beatae debitis nulla. Assumenda, perspiciatis natus
                     dignissimos mollitia tempora provident aperiam incidunt
                     repudiandae? Lorem ipsum dolor sit amet consectetur,
