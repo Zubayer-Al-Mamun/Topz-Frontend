@@ -3,20 +3,22 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { addProduct } from "./actions/action";
 import Page from "./components/Page";
+import PrivateRoute from "./components/PrivateRoute"; // ✅ import this
 import SingleProduct from "./components/SingleProduct";
+import AddColor from "./components/adminPanel/AddColor";
 import AddProduct from "./components/adminPanel/AddProduct";
 import Dashboard from "./components/adminPanel/Dashboard";
 import ProductEdit from "./components/adminPanel/ProductEdit";
 import AdminProducts from "./components/adminPanel/compo/AdminProducts";
 import Analytics from "./components/adminPanel/compo/Analytics";
-import Home from "./components/home/Home";
-import Shop from "./components/shop/Shop";
-import PrivateRoute from "./components/PrivateRoute"; // ✅ import this
-import "./index.css";
-import { product, products } from "./loader/loader";
 import Login from "./components/adminPanel/login";
 import ContactUs from "./components/contacts/ContactUs";
-import AddColor from "./components/adminPanel/AddColor";
+import Home from "./components/home/Home";
+import Shop from "./components/shop/Shop";
+import "./index.css";
+import { product, products } from "./loader/loader";
+import Buy from "./components/buy/Buy";
+import SeeColor from "./components/adminPanel/compo/SeeColor";
 
 const router = createBrowserRouter([
     {
@@ -30,6 +32,11 @@ const router = createBrowserRouter([
                 loader: products,
             },
             {
+                path: "buy/:productId",
+                element: <Buy/>,
+                loader: product,
+            },
+            {
                 path: "shop",
                 element: <Shop />,
                 loader: products,
@@ -41,12 +48,12 @@ const router = createBrowserRouter([
             },
             {
                 path: "contacts",
-                element: <ContactUs/>,
+                element: <ContactUs />,
             },
             {
-                path : "login",
-                element : <Login/>
-            }
+                path: "login",
+                element: <Login />,
+            },
         ],
     },
 
@@ -68,8 +75,14 @@ const router = createBrowserRouter([
                         loader: products,
                     },
                     {
+                        path : "products/seecolor/:productId",
+                        element : <SeeColor/>,
+                        loader : product,
+                    },
+                    {
                         path: "products/addcolor/:productId",
-                        element: <AddColor/>
+                        element: <AddColor />,
+                        loader : product,
                     },
                     {
                         path: "products/:productId",

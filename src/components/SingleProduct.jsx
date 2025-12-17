@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLoaderData } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
+import { pushDataLayer } from "../utils/datalayer.js";
 import PopUp from "./Popup.jsx";
-
 
 export default function SingleProduct() {
     const [showFullTitle, setShowFullTitle] = useState(false);
@@ -17,6 +17,21 @@ export default function SingleProduct() {
     const images = product.images;
     const [selected, setSelected] = useState(images[0]);
 
+    const pushedRef = useRef(false);
+
+    useEffect(() => {
+        if (!product || pushedRef.current) return;
+
+        pushDataLayer({
+            event: "view_item",
+            item_id: product._id,
+            item_name: product.title,
+            price: product.pricing,
+            discount: product.discountsPercentage,
+        });
+
+        pushedRef.current = true;
+    }, [product]);
 
     useEffect(() => {
         if (!hasFetched.current) {
@@ -31,7 +46,7 @@ export default function SingleProduct() {
 
     useEffect(() => {
         window.scrollTo(0, 0);
-    },[]);
+    }, []);
     return (
         <div className="min-h-screen w-[100%] lg:w-[1100px] flex flex-col items-center relative">
             <div
@@ -310,9 +325,9 @@ export default function SingleProduct() {
             </div>
 
             {/* popup */}
-            {showPopup && <PopUp product={product} setShowPopup={setShowPopup}/>}
-
-            
+            {showPopup && (
+                <PopUp product={product} setShowPopup={setShowPopup} />
+            )}
         </div>
     );
 }

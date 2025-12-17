@@ -158,7 +158,8 @@ export default function ProductEdit() {
 
                         <div className="space-y-4">
                             {product.vars.map((color, idx) => (
-                                <div className="flex flex-col gap-3 p-1 rounded-md bg-[#d9c3b0] mb-2">
+                                <div className="flex flex-col gap-3 p-1 rounded-md mb-2">
+                                    <hr />
                                     <h1 className="text-center font-semibold">
                                         Color {idx + 1}
                                     </h1>

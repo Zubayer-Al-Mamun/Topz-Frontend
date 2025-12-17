@@ -34,6 +34,13 @@ export default function AdminProducts() {
 
                     <div className=" h-full flex items-center text-[11px]">
                         <Link
+                            to={`/admin/products/seecolor/${product._id}`}
+                            className="p-1 py-2 m-1 border rounded-lg bg-gray-300"
+                        >
+                            {" "}
+                            See Color
+                        </Link>
+                        <Link
                             to={`/admin/products/addcolor/${product._id}`}
                             className="p-1 py-2 m-1 border rounded-lg bg-gray-300"
                         >

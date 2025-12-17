@@ -1,43 +1,48 @@
 @import "tailwindcss";
 
-
-
-*{
-  /* overflow: hidden; */
-  box-sizing: border-box;
+* {
+    /* overflow: hidden; */
+    box-sizing: border-box;
 }
-
 
 @font-face {
-   font-family: bang;
-   src: url(./assets/font/bangla.ttf);
+    font-family: bang;
+    src: url(./assets/font/bangla.ttf);
 }
 
-.bangla-text{
+.bangla-text {
     font-family: bang;
-    font-weight:bold;
+    font-weight: bold;
 }
 
 .categorie::-webkit-scrollbar {
-      width: 0px; /* Hides the scrollbar */
-    }
+    width: 0px; /* Hides the scrollbar */
+}
 
-    .single_product_popup::-webkit-scrollbar {
-      /* display: none; */
-      width: 0px;
-    }
+.single_product_popup::-webkit-scrollbar {
+    /* display: none; */
+    width: 0px;
+}
 
 
+.no-scrollbar::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
+}
+
+/* .no-scrollbar {
+  scrollbar-width: none;
+} */
 
 @keyframes slideUp {
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(0);
-  }
+    0% {
+        transform: translateY(100%);
+    }
+    100% {
+        transform: translateY(0);
+    }
 }
 
 .popup {
-  animation: slideUp 0.3s ease-out forwards;
+    animation: slideUp 0.3s ease-out forwards;
 }
