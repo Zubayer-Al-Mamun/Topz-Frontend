@@ -1,7 +1,30 @@
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 
 export default function AdminProducts() {
     const products = useLoaderData();
+    const navigate = useNavigate();
+
+
+    const handleDelete = async (product_id) => {
+        try {
+            const result = await fetch(`${import.meta.env.VITE_API_URL}/products/${product_id}`, {
+                method: "DELETE",
+            })
+
+            const data = await result.json();
+            console.log(data);
+
+            if(!result.ok){
+                throw new Error(`${product_id} deleting failed`)
+            }
+
+            navigate("/admin/products");
+
+        }catch(err){
+            console.log(err.message, err);
+        }
+    }
+
     return (
         // <div>this is products page</div>
         <div className="overflow-y-scroll">
@@ -33,6 +56,11 @@ export default function AdminProducts() {
                     </div>
 
                     <div className=" h-full flex items-center text-[11px]">
+
+                        <button className="p-1 py-2 m-1 border rounded-lg bg-gray-300"
+                            onClick={()=> handleDelete(product._id)}
+                        >Delete</button>
+
                         <Link
                             to={`/admin/products/seecolor/${product._id}`}
                             className="p-1 py-2 m-1 border rounded-lg bg-gray-300"

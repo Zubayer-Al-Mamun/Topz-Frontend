@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { addProduct } from "./actions/action";
 import Page from "./components/Page";
-import PrivateRoute from "./components/PrivateRoute"; // ✅ import this
+import PrivateRoute from "./components/PrivateRoute";
 import SingleProduct from "./components/SingleProduct";
 import AddColor from "./components/adminPanel/AddColor";
 import AddProduct from "./components/adminPanel/AddProduct";
@@ -19,16 +19,18 @@ import "./index.css";
 import { product, products } from "./loader/loader";
 import Buy from "./components/buy/Buy";
 import SeeColor from "./components/adminPanel/compo/SeeColor";
+import Loading from "./components/Loading";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Page />,
         errorElement: <div>Some error in this Route..</div>,
+        hydrateFallbackElement: <Loading/>,
         children: [
             {
                 index: true,
-                element: <Home />,
+                element: <Home /> ,
                 loader: products,
             },
             {
@@ -57,13 +59,14 @@ const router = createBrowserRouter([
         ],
     },
 
-    // ✅ Protected Admin Routes
+    // Protected Admin Routes
     {
         path: "/admin",
         element: <PrivateRoute />, // Protect all admin routes
         children: [
             {
-                element: <Dashboard />, // Dashboard layout
+                element: <Dashboard />,
+                hydrateFallbackElement: <Loading/>,
                 children: [
                     {
                         index: true,

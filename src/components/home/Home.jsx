@@ -66,7 +66,7 @@ export default function Home() {
                     <p className="bangla-text" > আসসালামু আলাইকুম </p>
                 </div> */}
                 {products.map((product, idx) => (
-                    <Product key={idx} product={product} />
+                    <Product key={idx} product={product}  idx={idx} />
                 ))}
             </div>
             <BottomNavbar/>

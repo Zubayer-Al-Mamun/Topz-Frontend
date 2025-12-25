@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, useLoaderData } from "react-router-dom";
+import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
@@ -18,6 +18,11 @@ export default function SingleProduct() {
     const [selected, setSelected] = useState(images[0]);
 
     const pushedRef = useRef(false);
+
+    const navigate = useNavigate();
+    const handleBuyNow = (product_id) => {
+        navigate(`/buy/${product_id}`)
+    }
 
     useEffect(() => {
         if (!product || pushedRef.current) return;
@@ -261,7 +266,8 @@ export default function SingleProduct() {
                             <button
                                 className="ml-2 font-bold text-white   border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
                                 onClick={() => {
-                                    setShowPopup(true);
+                                    // setShowPopup(true);
+                                    handleBuyNow(product._id);
                                 }}
                             >
                                 Buy Now
@@ -305,7 +311,8 @@ export default function SingleProduct() {
                             <button
                                 className="mx-2 font-bold text-white  border h-full bg-[#ffab1c] border-gray-400 px-6  rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
                                 onClick={() => {
-                                    setShowPopup(true);
+                                    // setShowPopup(true);
+                                    handleBuyNow(product._id);
                                 }}
                             >
                                 Buy Now
