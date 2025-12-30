@@ -332,9 +332,9 @@ export default function SingleProduct() {
             </div>
 
             {/* popup */}
-            {showPopup && (
-                <PopUp product={product} setShowPopup={setShowPopup} />
-            )}
+            {showPopup && (<PopUp product={product} setShowPopup={setShowPopup} />)}
         </div>
     );
 }
+
+

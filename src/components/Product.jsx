@@ -71,8 +71,9 @@ export default function Product({ product, idx }) {
                 </div>
             </NavLink>
 
+
             {/* Buttons */}
-            <div className="flex justify-between items-center">
+            {/* <div className="flex justify-between items-center">
                 <button className=" h-full py-2 px-3 mr-2 rounded-tr-xl hover:bg-gray-300 transition border- border-r border-[#19183beb]">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -90,7 +91,8 @@ export default function Product({ product, idx }) {
                 >
                     Buy now
                 </NavLink>
-            </div>
+            </div> */}
+
         </motion.div>
     );
 }

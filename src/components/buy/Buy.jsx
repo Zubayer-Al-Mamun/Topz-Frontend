@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { useLoaderData } from "react-router-dom";
+import { pushDataLayer } from "../../utils/datalayer";
 import ImageCarousel from "./ImageCarousel";
 import ShippingAddress from "./ShippingAddress";
-import { pushDataLayer } from "../../utils/datalayer";
 
 export default function Buy() {
     const product = useLoaderData();
@@ -32,7 +32,7 @@ export default function Buy() {
         status: "pending",
     });
 
-    
+
 
     useEffect(() => {
         if (!product || pushedRef.current) return;
@@ -55,14 +55,45 @@ export default function Buy() {
             <div className="w-full h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 md:p-4 gap-4 lg:px-25">
                 {/* LEFT */}
                 <div className="p-2">
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                         <div className="rounded-md w-[150px] h-[150px]">
                             <ImageCarousel images={images} />
                         </div>
-                        <div className="py-4">
+
+
+
+                        <div className="flex flex-col">
+
+                            <div
+                                className="text-[16px] font-bold line-clamp-2"
+                            >
+                                {product.title}
+                            </div>
+
+
+                            <div className="flex  items-baseline-last gap-2 mb-3">
+                                <p className="text-2xl text-red-500 font-bold">
+                                    ৳{" "}
+                                    {Math.ceil(
+                                        product.pricing *
+                                        (1 - product.discountsPercentage / 100)
+                                    )}
+                                </p>
+                                <span className="text-[12px] line-through font-semibold text-gray-500">
+                                    {" "}
+                                    ৳ {product.pricing}
+                                </span>
+                                <span className="text-[12px] text-red-500 font-semibold rounded-sm bg-red-100 px-1">
+                                    {" "}
+                                    ৳ -{product.discountsPercentage}%
+                                </span>
+                            </div>
+
+                        </div>
+                        {/* <div className="py-4">
                             <p className="line-clamp-1">{product.title}</p>
                             <p>{product.pricing}</p>
-                        </div>
+                        </div> */}
                     </div>
 
                     <div className="sm:p-4 sm:px-6">
