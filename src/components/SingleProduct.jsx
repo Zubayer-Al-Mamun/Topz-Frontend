@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, redirect, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
@@ -13,8 +13,11 @@ export default function SingleProduct() {
     const [fullImage, setFullImage] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
 
+
+
     const product = useLoaderData();
-    const images = product.images;
+    const [images, setImages] = useState(product.images);
+    // const images = product.images;
     const [selected, setSelected] = useState(images[0]);
 
     const pushedRef = useRef(false);
@@ -49,6 +52,13 @@ export default function SingleProduct() {
         }
     }, [product._id]);
 
+
+    useEffect(() => {
+
+        const varImages = product.vars.flatMap((v) => v.imageUrl || []);
+        setImages([...product.images, ...varImages]);
+    }, [product]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -70,7 +80,7 @@ export default function SingleProduct() {
             <div className="w-full sm:p-4 grid grid-cols-1 md:grid-cols-2">
                 <div className="flex max-sm:items-center sm:flex-col sm:items-center">
                     <div
-                        className="w-4/5 md:w-[300px] md:h-[300px] aspect-square ml-2 mt-2 rounded-lg"
+                        className="w-4/5 sm:w-[350px] sm:h-[350px] aspect-square ml-2 mt-2 rounded-lg"
                         onClick={() => setFullImage(selected)}
                     >
                         <img
@@ -85,11 +95,10 @@ export default function SingleProduct() {
                             <button
                                 key={idx}
                                 onClick={() => setSelected(img)}
-                                className={`border-2 rounded-lg ${
-                                    selected === img
-                                        ? "border-blue-500"
-                                        : "border-gray-300"
-                                }`}
+                                className={`border-2 rounded-lg ${selected === img
+                                    ? "border-blue-500"
+                                    : "border-gray-300"
+                                    }`}
                             >
                                 <img
                                     src={img.replace(
@@ -108,11 +117,10 @@ export default function SingleProduct() {
                             <button
                                 key={idx}
                                 onClick={() => setSelected(img)}
-                                className={`flex-shrink-0 w-12 h-12 rounded-lg ${
-                                    selected === img
-                                        ? "border-blue-500 border-2"
-                                        : "border-gray-300"
-                                }`}
+                                className={`flex-shrink-0 w-12 h-12 rounded-lg ${selected === img
+                                    ? "border-blue-500 border-2"
+                                    : "border-gray-300"
+                                    }`}
                             >
                                 <img
                                     src={img.replace(
@@ -138,7 +146,7 @@ export default function SingleProduct() {
                             ৳{" "}
                             {Math.ceil(
                                 product.pricing *
-                                    (1 - product.discountsPercentage / 100)
+                                (1 - product.discountsPercentage / 100)
                             )}
                         </p>
                         <span className="text-[12px] line-through font-semibold text-gray-500">
@@ -187,48 +195,62 @@ export default function SingleProduct() {
                         </div>
                     </div>
 
-                    <div className="bg-gray-200 text-[14px] py-1 px-2 rounded-md">
-                        <Link to=" " className="flex justify-between my-1">
-                            <p> [ ] 3 days easy return . warranty</p>
-                            <p>go</p>
-                        </Link>
+                    <div className="bg-gray-200 text-[12px] py-1 px-2 rounded-md">
+                        <div to="#" className="flex justify-between my-1">
+                            <ul className="list-disc list-inside">
+                                <li>পণ্য হাতে পেয়ে যাচাই করে টাকা পরিশোধের সুযোগ</li>
+                                {/* <li>3 days easy return . warranty</li> */}
+                                <li>৩ দিনের মধ্যে সহজ রিটার্ন সুবিধা এবং গ্যারান্টি সহ।</li>
+                            </ul>
 
-                        <Link to=" " className="flex justify-between my-1">
+                            <div className="flex items-center justify-center">
+                                <p>go</p>
+                            </div>
+                        </div>
+
+                        {/* <Link to="#" className="flex justify-between my-1">
                             <div>
-                                <p>Guaranteed by {}</p>
+                                <p>Guaranteed by { }</p>
                                 <p className="text-[11px]">Standard Delivery</p>
                             </div>
                             <p className="font-semibold">৳ 130</p>
-                        </Link>
+                        </Link> */}
                     </div>
+
+
+                    {/* <h1 className="text-[20px] font-bold mt-2">Description</h1>
 
                     {showFullDesc ? (
                         <div
                             onClick={() => setShowFullDesc(!showFullDesc)}
-                            className="text-gray-600 leading-relaxed mb-6 cursor-pointer"
+                            className="text-gray-600 leading-relaxed mb-6 cursor-pointer relative"
                         >
                             {product.description}
+
+
+                            <span className="text-black text-[18px] absolute bottom-0 right-0 bg-[#F8F8F0] px-3 font-semibold">
+                                see less...
+                            </span>
                         </div>
                     ) : (
                         <div
                             onClick={() => setShowFullDesc(!showFullDesc)}
-                            className="text-gray-600 leading-relaxed mb-6 line-clamp-4 relative cursor-pointer"
+                            className="text-gray-600 leading-relaxed mb-6 line-clamp-2 relative cursor-pointer"
                         >
                             {product.description}{" "}
                             <span className="text-black text-[18px] absolute bottom-0 right-0 bg-[#F8F8F0] px-3 font-semibold">
                                 see more..
                             </span>{" "}
                         </div>
-                    )}
+                    )} */}
 
-                    <div className="h-[60px] sm:hidden"></div>
+                    <div className="h-[60px]"></div>
 
                     <div className=" bg-[#F8F8F0] flex justify-between items-center py-1 max-md:hidden ">
                         <div className="flex">
                             <a
-                                href={`tel:${
-                                    import.meta.env.VITE_CONTACT_PHONE
-                                }`}
+                                href={`tel:${import.meta.env.VITE_CONTACT_PHONE
+                                    }`}
                                 className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400 "
                             >
                                 <img
@@ -243,9 +265,8 @@ export default function SingleProduct() {
                             </a>
 
                             <a
-                                href={`https://wa.me/${
-                                    import.meta.env.VITE_CONTACT_WHATS
-                                }`}
+                                href={`https://wa.me/${import.meta.env.VITE_CONTACT_WHATS
+                                    }`}
                                 className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -271,17 +292,19 @@ export default function SingleProduct() {
                                 }}
                             >
                                 Buy Now
-                                <br /> ৳ {product.pricing}
+                                <br /> ৳ {Math.ceil(
+                                    product.pricing *
+                                    (1 - product.discountsPercentage / 100)
+                                )}
                             </button>
                         </div>
                     </div>
 
-                    <div className=" fixed bottom-0 left-0 right-0 bg-[#F8F8F0] flex justify-between items-center py-1 shadow md:hidden ">
+                    <div className=" z-10 fixed bottom-0 left-0 right-0 bg-[#F8F8F0] flex justify-between items-center py-1 shadow md:hidden ">
                         <div className="flex">
                             <a
-                                href={`tel:${
-                                    import.meta.env.VITE_CONTACT_PHONE
-                                }`}
+                                href={`tel:${import.meta.env.VITE_CONTACT_PHONE
+                                    }`}
                                 className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -292,9 +315,8 @@ export default function SingleProduct() {
                             </a>
 
                             <a
-                                href={`https://wa.me/${
-                                    import.meta.env.VITE_CONTACT_WHATS
-                                }`}
+                                href={`https://wa.me/${import.meta.env.VITE_CONTACT_WHATS
+                                    }`}
                                 className=" text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
                                 <img
@@ -316,20 +338,52 @@ export default function SingleProduct() {
                                 }}
                             >
                                 Buy Now
-                                <br /> ৳ {product.pricing}
+                                <br /> ৳ {Math.ceil(
+                                    product.pricing *
+                                    (1 - product.discountsPercentage / 100)
+                                )}
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="w-full sm:p-4 grid grid-cols-1 md:grid-cols-2">
+            <div className="w-full">
+                <h1 className="text-[20px] font-bold mt-2">Description</h1>
+
+                {showFullDesc ? (
+                    <div
+                        onClick={() => setShowFullDesc(!showFullDesc)}
+                        className="text-gray-600 leading-relaxed mb-6 cursor-pointer relative"
+                    >
+                        {product.description}
+
+
+                        <span className="text-black text-[18px] absolute bottom-0 right-0 bg-[#F8F8F0] px-3 font-semibold">
+                            see less...
+                        </span>
+                    </div>
+                ) : (
+                    <div
+                        onClick={() => setShowFullDesc(!showFullDesc)}
+                        className="text-gray-600 leading-relaxed mb-6 line-clamp-2 relative cursor-pointer"
+                    >
+                        {product.description}{" "}
+                        <span className="text-black text-[18px] absolute bottom-0 right-0 bg-[#F8F8F0] px-3 font-semibold">
+                            see more..
+                        </span>{" "}
+                    </div>
+                )}
+            </div>
+
+            <div className="w-full sm:p-4 grid grid-cols-1 md:grid-cols-2 mb-20">
                 <div className="flex max-sm:items-center sm:flex-col sm:items-center">
                     <div>
                         <h1 className="text-[20px]">Ratings & Reviews</h1>
                     </div>
                 </div>
             </div>
+
 
             {/* popup */}
             {showPopup && (<PopUp product={product} setShowPopup={setShowPopup} />)}

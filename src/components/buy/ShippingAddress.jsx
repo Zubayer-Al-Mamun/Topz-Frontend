@@ -7,6 +7,9 @@ export default function ShippingAddress({ address, setAddress }) {
     const [allUnion, setAllUnion] = useState([]);
 
 
+    // console.log(address);
+
+
     // 1️⃣ Divisions (initial load)
     useEffect(() => {
         const controller = new AbortController();
@@ -17,7 +20,7 @@ export default function ShippingAddress({ address, setAddress }) {
             .then(res => res.json())
             .then(json => setAllDivision(json.data))
             .catch(err => {
-                if (err.name !== "AbortError") console.error(err) ;
+                if (err.name !== "AbortError") console.error(err);
             });
 
         return () => controller.abort();
@@ -34,7 +37,7 @@ export default function ShippingAddress({ address, setAddress }) {
             signal: controller.signal,
         })
             .then(res => res.json())
-            .then((json) => { if (json.length) setAllDistrict(json)})
+            .then((json) => { if (json.length) setAllDistrict(json) })
             .catch(err => {
                 if (err.name !== "AbortError") console.error(err);
             });
@@ -53,7 +56,7 @@ export default function ShippingAddress({ address, setAddress }) {
             signal: controller.signal,
         })
             .then(res => res.json())
-            .then((json) =>  {if(json.length)setAllUpazila(json)})
+            .then((json) => { if (json.length) setAllUpazila(json) })
             .catch(err => {
                 if (err.name !== "AbortError") console.error(err);
             });
@@ -72,7 +75,7 @@ export default function ShippingAddress({ address, setAddress }) {
             signal: controller.signal,
         })
             .then(res => res.json())
-            .then((json) =>  {if(json.length)setAllUnion(json)})
+            .then((json) => { if (json.length) setAllUnion(json) })
             .catch(err => {
                 if (err.name !== "AbortError") console.error(err);
             });
@@ -82,7 +85,7 @@ export default function ShippingAddress({ address, setAddress }) {
 
 
     return (
-        <div className="w-full max-w-4xl mx-auto sm:p-6 rounded-xl mb-6">
+        <div className="w-full max-w-4xl mx-auto sm:p-4 rounded-xl mb-2">
             <h2 className="max-md:hidden text-2xl font-semibold">
                 Buyer Information & Shipping Address
             </h2>
@@ -91,8 +94,24 @@ export default function ShippingAddress({ address, setAddress }) {
                 <Input label="Full Name" value={address.name}
                     onChange={(v) => setAddress({ ...address, name: v })} />
 
-                <Input label="Phone Number" value={address.phone}
-                    onChange={(v) => setAddress({ ...address, phone: v })} />
+                {/* <Input label="Phone Number" value={address.phone}
+                    onChange={(v) => setAddress({ ...address, phone: v })} /> */}
+
+
+                <div>
+                    <label className="block text-sm mb-1">Phone Number</label>
+                    <input
+                        type="tel"
+                        pattern="^01[3-9]\d{8}$"
+                        required
+                        value={address.phone}
+                        onChange={(e) => setAddress({ ...address, phone: e.target.value })}
+                        placeholder="01XXXXXXXXX"
+                        className="w-full border border-[#7f7575] rounded-md p-3 focus:ring-2 focus:ring-blue-500"
+                    />
+                </div>
+
+
 
                 <Select label="Division / Region" list="division"
                     placeholder="Enter division..."
@@ -127,14 +146,14 @@ export default function ShippingAddress({ address, setAddress }) {
 
                 <Input label="Landmark (optional)"
                     value={address.landmark}
-                    placeholder = "নাম: মসজিদ/কবরস্থান/বটতলা/বাজার/পুকুর"
+                    placeholder="নাম: মসজিদ/কবরস্থান/বটতলা/বাজার/পুকুর"
                     onChange={(v) => setAddress({ ...address, landmark: v })} />
             </div>
         </div>
     );
 }
 
-function Input({ label, value, onChange , placeholder}) {
+function Input({ label, value, onChange, placeholder }) {
     return (
         <div>
             <label className="block text-sm mb-1">{label}</label>

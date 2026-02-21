@@ -24,6 +24,10 @@
     width: 0px;
 }
 
+/* .scroll-bar-bg::-webkit-scrollbar{
+    color: red;
+} */
+
 
 .no-scrollbar::-webkit-scrollbar {
   width: 0px;
@@ -45,4 +49,15 @@
 
 .popup {
     animation: slideUp 0.3s ease-out forwards;
+}
+
+
+.no-spinner::-webkit-outer-spin-button,
+.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.no-spinner {
+  -moz-appearance: textfield;
 }

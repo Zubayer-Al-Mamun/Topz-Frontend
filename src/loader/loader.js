@@ -9,6 +9,7 @@ const url = import.meta.env.VITE_API_URL;
 
 
 export async function products() {
+  console.log(`${url}/products`)
 
   try {
     const response = await fetch(`${url}/products`);
