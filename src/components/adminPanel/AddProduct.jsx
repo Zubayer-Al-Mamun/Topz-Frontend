@@ -162,6 +162,7 @@ export default function ProductForm() {
                         <option value="t-shirt">T-Shirt</option>
                         <option value="shirt">Shirt</option>
                         <option value="drop-shoulder">Drop Shoulder</option>
+                        <option value="sharee">Sharee</option>
                     </select>
                 </div>
 
