@@ -45,6 +45,15 @@ export default function SideNavbar({ setShowSideNavbar }) {
                         className={({ isActive }) =>
                             isActive ? "bg-gray-400 p-2" : "p-2"
                         }
+                        to={"/orders"}
+                    >
+                        <b>Orders</b>
+                    </NavLink>
+
+                    <NavLink
+                        className={({ isActive }) =>
+                            isActive ? "bg-gray-400 p-2" : "p-2"
+                        }
                         to={"/contacts"}
                     >
                         <b>Contacts Us</b>

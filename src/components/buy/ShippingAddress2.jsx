@@ -28,7 +28,7 @@ export default function ShippingAddress2({ order, setOrder }) {
                     type="text"
                     value={order.customerDetails.name}
                     placeholder=""
-                    className="w-full mb-2 px-4 py-3 rounded bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400"
+                    className="w-full mb-2 px-4 py-3 rounded bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 "
                     required
                     id="name"
                 />
@@ -83,7 +83,7 @@ export default function ShippingAddress2({ order, setOrder }) {
                     id="address"
                 />
 
-                <label
+                {/* <label
                     className="mt-2 text-[18px] pl-1 font-semibold"
                     htmlFor="note"
                 >
@@ -99,7 +99,7 @@ export default function ShippingAddress2({ order, setOrder }) {
                     className="w-full mb-2 px-4 py-3 rounded bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
                     required
                     id="note"
-                />
+                /> */}
 
                 {/* <button
           type="submit"

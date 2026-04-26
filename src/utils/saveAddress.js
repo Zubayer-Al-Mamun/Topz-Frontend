@@ -1,4 +1,5 @@
 export function saveNewAddress(address){
+    console.log(address);
     localStorage.setItem("user_addresses", JSON.stringify(address));
 }
 

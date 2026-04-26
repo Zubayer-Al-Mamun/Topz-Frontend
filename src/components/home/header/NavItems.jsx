@@ -33,6 +33,17 @@ export default function NavItems(){
                         ? "h-full flex items-center px-3 border-b-4 border-[#c59438] text-[#dca848] transition duration-300 ease-in-out rounded-sm"
                         : "px-3 h-full flex items-center"
                 }
+                to={"/orders"}
+            >
+                <b>Orders</b>
+            </NavLink>
+
+            <NavLink
+                className={({ isActive }) =>
+                    isActive
+                        ? "h-full flex items-center px-3 border-b-4 border-[#c59438] text-[#dca848] transition duration-300 ease-in-out rounded-sm"
+                        : "px-3 h-full flex items-center"
+                }
                 to={"/contacts"}
             >
                 <b>Contact Us</b>

@@ -1,33 +1,51 @@
-import { motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import CrossBlack from "../../assets/cross_black.svg";
 import { pushDataLayer } from "../../utils/datalayer";
-import ImageCarousel from "./ImageCarousel";
+import { saveNewAddress } from "../../utils/saveAddress";
+import ColorFamily from "./ColorFamily";
 import ShippingAddress2 from "./ShippingAddress2";
+import SizeAndQty from "./SizeAndQty";
+import Subtotal from "./Subtotal";
+import TitleAndPrice from "./TitleAndPrice";
+
+import PhoneIcon from "../../assets/phone-1.svg";
+import PlaceIcon from "../../assets/place-svgrepo-com.svg";
+import ProfileIcon from "../../assets/profile-svgrepo-com.svg";
 
 export default function Buy() {
+    const [orderIds, setOrderIds] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("user_orderIds")) || [];
+        } catch {
+            return [];
+        }
+    });
+    // console.log(orderIds);
+    const navigate = useNavigate();
     const product = useLoaderData();
     const pushedRef = useRef(false);
     const [images, setImages] = useState(product.images);
     let discountsPrice = Math.ceil(
         product.pricing * (1 - product.discountsPercentage / 100),
     );
-    let codCharge = 110;
+    let codCharge = product?.codChargeStatus
+        ? product.codCharge
+        : Number(import.meta.env.VITE_COD_CHARGE);
 
     // const [selectedColor, setSelectedColor] = useState({});
     const [newAddress, setNewAddress] = useState(null);
-    const [customerDetails, setCustomerDetails] = useState({
-        name: "",
-        phone: "",
-        village: "",
-        union: "",
-        upazila: "",
-        district: "",
-        division: "",
-        landmark: "",
-        addressFull: "",
-    });
+    // const [customerDetails, setCustomerDetails] = useState({
+    //     name: "",
+    //     phone: "",
+    //     village: "",
+    //     union: "",
+    //     upazila: "",
+    //     district: "",
+    //     division: "",
+    //     landmark: "",
+    //     addressFull: "",
+    // });
 
     const [saveAddresses, setSaveAddresses] = useState(() => {
         try {
@@ -37,35 +55,83 @@ export default function Buy() {
         }
     });
 
-    const handleBuyNow = (orderDetails) => {
-        console.log(orderDetails);
-        // saveNewAddress(customerDetails);
-    };
+    // console.log(JSON.parse(localStorage.getItem("user_addresses")));
 
-    const [order, setOrder] = useState({
-        customerDetails: {
-            name: "",
-            phone: "",
-            village: "",
-            union: "",
-            upazila: "",
-            district: "",
-            division: "",
-            landmark: "",
-            addressFull: "",
-        },
+    const [order, setOrder] = useState(() => ({
+        customerDetails: saveAddresses?.phone
+            ? saveAddresses
+            : {
+                  name: "",
+                  phone: "",
+                  village: "",
+                  union: "",
+                  upazila: "",
+                  district: "",
+                  division: "",
+                  landmark: "",
+                  addressFull: "",
+              },
 
         items: [],
         productId: product._id,
-        imageUrl: product.imageUrl,
-
+        imageUrl: product.images,
         paymentMethod: "cod",
         status: "pending",
         note: "",
-    });
+    }));
+
+    console.log(order);
+    //    place order Button
+
+    const handleBuyNow = async (orderDetails) => {
+        console.log(orderDetails);
+        saveNewAddress(orderDetails.customerDetails);
+
+        try {
+            const result = await fetch(
+                import.meta.env.VITE_API_URL + "/order",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(orderDetails),
+                },
+            );
+            const newOrderId = await result.json();
+
+            await localStorage.setItem(
+                "user_orderIds",
+                JSON.stringify([...orderIds, newOrderId]),
+            );
+
+            if (result.ok) {
+                console.log(newOrderId);
+
+                navigate("/orders");
+            }
+        } catch (error) {
+            console.log("error in order creating request", error);
+        }
+    };
+
+    // useEffect(()=>{
+    //     if(product.vars?.length === null) {
+    //         setOrder((prev) => ({
+    //             ...prev,
+    //             items : [{
+    //                 imageUrl : prev.imageUrl,
+    //                 qty : 1,
+    //                 productId : prev._id,
+    //                 selectedSize : null,
+
+    //             }]
+    //         }) )
+    //     }
+    // },[product])
 
     const handleColor = (v) => {
-        console.log(v);
+        // console.log(v);
 
         order.items.filter((col) => col.color === v.color).length
             ? setOrder({
@@ -94,42 +160,6 @@ export default function Buy() {
               });
     };
 
-    const handleQty = (color, type) => {
-        setOrder((prev) => ({
-            ...prev,
-            items: prev.items.map((item) =>
-                item.color === color
-                    ? {
-                          ...item,
-                          qty:
-                              type === "inc"
-                                  ? item.qty + 1
-                                  : item.qty > 1
-                                    ? item.qty - 1
-                                    : 1,
-                      }
-                    : item,
-            ),
-        }));
-    };
-
-    const handleSize = (color, size) => {
-        console.log(color, size);
-        setOrder((prev) => ({
-            ...prev,
-            items: prev.items.map((item) =>
-                item.color === color.color
-                    ? {
-                          ...item,
-                          selectedSize: size,
-                      }
-                    : item,
-            ),
-        }));
-    };
-
-    console.log(order);
-
     useEffect(() => {
         if (!product.vars || product.vars.length === 0) {
             setOrder((prev) => ({
@@ -137,7 +167,10 @@ export default function Buy() {
                 items: [
                     {
                         productId: product._id,
-                        imageUrl: product.imageUrl,
+                        imageUrl: product.images,
+                        pricing: product.discountsPrice,
+                        qty: 1,
+                        selectedSize: "base",
                     },
                 ],
             }));
@@ -160,533 +193,57 @@ export default function Buy() {
         setImages([...product.images, ...varImages]);
     }, [product]);
 
+    const isValidOrder =
+        order.customerDetails.phone &&
+        order.customerDetails.name &&
+        (order.customerDetails.addressFull ||
+            order.customerDetails.upazila ||
+            order.customerDetails.union);
+
+    const totalPrice =
+        order.items.reduce(
+            (sum, item) => sum + (item.pricing || discountsPrice) * item.qty,
+            0,
+        ) + codCharge;
+
     return (
-        <div className="fixed inset-0 z-30 bg-[#293a5256] backdrop-blur-sm">
+        <div className="fixed inset-0 z-30 bg-white">
             <div className="w-full h-full overflow-y-auto grid grid-cols-1 md:grid-cols-2 md:p-4 gap-4 lg:px-25">
                 {/* LEFT */}
-                <div className="p-2  md-h-[100vh] md:overflow-y-scroll no-scrollbar">
-                    <div className="flex gap-2 items-center">
-                        <div className="rounded-md w-[80px] h-[80px] md:w-[150px] md:h-[150px]">
-                            <ImageCarousel showArrows={false} images={images} />
-                        </div>
+                <div className="p-2 pb-4  md-h-[100vh] md:overflow-y-scroll no-scrollbar">
+                    <TitleAndPrice
+                        discountsPrice={discountsPrice}
+                        product={product}
+                        images={images}
+                    />
+                    <ColorFamily
+                        product={product}
+                        order={order}
+                        handleColor={handleColor}
+                    />
 
-                        <div className="flex flex-col">
-                            <div className="text-[16px] text-white font-bold line-clamp-2">
-                                {product.title}
-                            </div>
-
-                            <div className="flex  items-baseline-last gap-2 mb-3">
-                                <p className="text-2xl text-red-500 font-bold">
-                                    ৳ {discountsPrice}
-                                </p>
-                                <span className="text-[12px] line-through font-semibold text-white">
-                                    {" "}
-                                    ৳ {product.pricing}
-                                </span>
-                                <span className="text-[12px] text-red-500 font-semibold rounded-sm bg-red-100 px-1">
-                                    {" "}
-                                    ৳ -{product.discountsPercentage}%
-                                </span>
-                            </div>
-                        </div>
-                        {/* <div className="py-4">
-                            <p className="line-clamp-1">{product.title}</p>
-                            <p>{product.pricing}</p>
-                        </div> */}
-                    </div>
-
-                    <div className="sm:py-4">
-                        {product.vars.length > 0 && (
-                            <>
-                                <h1 className="font-semibold text-xl py-2 border-t border-gray-500 mt-4">
-                                    Color Family{" "}
-                                    {order.items.length < 1 && (
-                                        <p className="text-red-500 text-[12px]">
-                                            (আপনার পছন্দের কালারটি বাছাই করুন)
-                                        </p>
-                                    )}
-                                </h1>
-
-                                <div className="flex w-full gap-2 overflow-x-auto scroll-bar-bg">
-                                    {product.vars.map((v, idx) => (
-                                        <div
-                                            onClick={() => handleColor(v)}
-                                            key={idx}
-                                            className={`cursor-pointer rounded-lg text-center shrink-0 border-2 ${order.items.some((c) => c.color === v.color) ? "border-green-500" : "border-gray-300"} transform transition-all duration-150 active:scale-95 active:translate-y-1`}
-                                        >
-                                            <img
-                                                className="w-16 h-16 object-cover rounded-lg"
-                                                src={v.imageUrl[0]}
-                                                alt=""
-                                            />
-                                            <p>{v.color}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            </>
-                        )}
-                    </div>
-
-                    {order.items.length > 0 && (
-                        <div className="border-gray-500 pb-4">
-                            <h1 className="font-semibold text-xl pt-2 mt-2 border-t">
-                                Size and Quantity
-                            </h1>
-                            <div className="md:h-[40vh]">
-                                {order.items.map((c, idx) => (
-                                    <motion.div
-                                        className={`border-2 mt-2 ${c.selectedSize !== null ? "border-green-400 bg-green-200" : "border-red-400"} rounded flex justify-between px-1 py-1 relative`}
-                                        initial={{ scale: 0.8, opacity: 0 }} // শুরুতে ছোট এবং অদৃশ্য
-                                        whileInView={{ scale: 1, opacity: 1 }} // view-এ আসলে বড় এবং দেখা যাবে
-                                        viewport={{ once: true, amount: 0.2 }} // screen-এ 50% দেখলে animation হবে, একবারই
-                                        transition={{
-                                            duration: 0.5,
-                                            ease: "easeOut",
-                                        }}
-                                        key={idx}
-                                    >
-                                        <div>
-                                            <div className="flex items-center mb-2">
-                                                <img
-                                                    className="w-16 h-16 object-cover rounded-lg"
-                                                    src={c.imageUrl[0]}
-                                                    alt=""
-                                                />
-                                                <p className="ml-2 font-semibold">
-                                                    {c.color}
-                                                </p>
-                                            </div>
-
-                                            <div className="flex">
-                                                <div className="text-[13px]">
-                                                    <div>
-                                                        {!c.selectedSize && (
-                                                            <motion.div
-                                                                className="w-30 ml-1 text-red-600 font-bold"
-                                                                initial={{
-                                                                    opacity: 0,
-                                                                }}
-                                                                animate={{
-                                                                    opacity: [
-                                                                        1, 0.3,
-                                                                        1,
-                                                                    ],
-                                                                    scale: [
-                                                                        1, 1.05,
-                                                                        1,
-                                                                    ],
-                                                                }}
-                                                                transition={{
-                                                                    duration: 2,
-                                                                    repeat: Infinity,
-                                                                    ease: "easeInOut",
-                                                                }}
-                                                            >
-                                                                সাইজ নির্বাচন
-                                                                করুন
-                                                            </motion.div>
-                                                        )}
-                                                    </div>
-
-                                                    <div className="flex text-[13px]">
-                                                        {c.s > 0 && (
-                                                            <div
-                                                                onClick={() =>
-                                                                    handleSize(
-                                                                        c,
-                                                                        "s",
-                                                                    )
-                                                                }
-                                                                className={`border-gray-600 ${c.selectedSize === "s" && "bg-green-400 text-white font-semibold"} mr-1 border w-7 h-7 flex justify-center items-center text-[13px] cursor-pointer transform transition-all duration-150 active:scale-120`}
-                                                            >
-                                                                {" "}
-                                                                S{" "}
-                                                            </div>
-                                                        )}
-
-                                                        {c.m > 0 && (
-                                                            <div
-                                                                onClick={() =>
-                                                                    handleSize(
-                                                                        c,
-                                                                        "m",
-                                                                    )
-                                                                }
-                                                                className={`border-gray-600 ${c.selectedSize === "m" && "bg-green-400 border-white text-white font-semibold"} mr-1 border w-7 h-7 flex justify-center items-center text-[13px] cursor-pointer transform transition-all duration-150 active:scale-120`}
-                                                            >
-                                                                {" "}
-                                                                M{" "}
-                                                            </div>
-                                                        )}
-
-                                                        {c.l > 0 && (
-                                                            <div
-                                                                onClick={() =>
-                                                                    handleSize(
-                                                                        c,
-                                                                        "l",
-                                                                    )
-                                                                }
-                                                                className={`border-gray-600 ${c.selectedSize === "l" && "bg-green-400 border-white text-white font-semibold"} mr-1 border w-7 h-7 flex justify-center items-center text-[13px] cursor-pointer transform transition-all duration-150 active:scale-120`}
-                                                            >
-                                                                {" "}
-                                                                L{" "}
-                                                            </div>
-                                                        )}
-                                                        {c.xl > 0 && (
-                                                            <div
-                                                                onClick={() =>
-                                                                    handleSize(
-                                                                        c,
-                                                                        "xl",
-                                                                    )
-                                                                }
-                                                                className={`border-gray-600 ${c.selectedSize === "xl" && "bg-green-400 border-white text-white font-semibold"} mr-1 border w-7 h-7 flex justify-center items-center text-[13px] cursor-pointer transform transition-all duration-150 active:scale-120`}
-                                                            >
-                                                                {" "}
-                                                                XL{" "}
-                                                            </div>
-                                                        )}
-                                                        {c.xxl > 0 && (
-                                                            <div
-                                                                onClick={() =>
-                                                                    handleSize(
-                                                                        c,
-                                                                        "xxl",
-                                                                    )
-                                                                }
-                                                                className={`border-gray-600 ${c.selectedSize === "xxl" && "bg-green-400 border-white text-white font-semibold"} mr-1 border w-7 h-7 flex justify-center items-center text-[13px] cursor-pointer transform transition-all duration-150 active:scale-120`}
-                                                            >
-                                                                {" "}
-                                                                XXl{" "}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex flex-col justify-between">
-                                            <div className="flex justify-end">
-                                                <div
-                                                    onClick={() =>
-                                                        handleColor(c)
-                                                    }
-                                                    className=" w-7 h-7 flex justify-center items-center cursor-pointer transform transition-all duration-150 active:scale-120"
-                                                >
-                                                    <img
-                                                        className="w-5"
-                                                        src={CrossBlack}
-                                                        alt=""
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div className="flex justify-end">
-                                                <p>
-                                                    {(c.pricing ||
-                                                        discountsPrice) *
-                                                        c.qty}{" "}
-                                                    ৳
-                                                </p>
-                                            </div>
-
-                                            <div className="flex">
-                                                <div
-                                                    className="border border-gray-600 w-7 h-7 text-3xl flex rounded-full justify-center items-center cursor-pointer transform transition-all duration-150 active:scale-120"
-                                                    onClick={() =>
-                                                        handleQty(
-                                                            c.color,
-                                                            "dec",
-                                                        )
-                                                    }
-                                                >
-                                                    -
-                                                </div>
-
-                                                <input
-                                                    type="number"
-                                                    min="1"
-                                                    value={c.qty}
-                                                    onChange={(e) => {
-                                                        const value = Number(
-                                                            e.target.value,
-                                                        );
-
-                                                        setOrder((prev) => ({
-                                                            ...prev,
-                                                            items: prev.items.map(
-                                                                (item) =>
-                                                                    item.color ===
-                                                                    c.color
-                                                                        ? {
-                                                                              ...item,
-                                                                              qty:
-                                                                                  value <
-                                                                                  1
-                                                                                      ? 1
-                                                                                      : value,
-                                                                          }
-                                                                        : item,
-                                                            ),
-                                                        }));
-                                                    }}
-                                                    className="w-7 h-7 text-center border-gray-600 border rounded-md outline-none mx-1 no-spinner"
-                                                />
-                                                {/* <span className="w-7 h-7 flex justify-center items-center">
-                                                        {c.qty}
-                                                    </span> */}
-                                                <div
-                                                    className="border border-gray-600 w-7 h-7 text-2xl flex rounded-full justify-center items-center cursor-pointer  transform transition-all duration-150 active:scale-120"
-                                                    onClick={() =>
-                                                        handleQty(
-                                                            c.color,
-                                                            "inc",
-                                                        )
-                                                    }
-                                                >
-                                                    +
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-
-                    {/* item SubTotal */}
-
-                    {order.items.length > 0 && (
-                        <div className="md:hidden w-full font-bold border">
-                            <div className="flex justify-between pl-[40%] pr-2">
-                                <span>Item Subtotal</span>
-                                <span>
-                                    {order.items.reduce(
-                                        (sum, item) =>
-                                            sum +
-                                            (item.pricing || discountsPrice) *
-                                                item.qty,
-                                        0,
-                                    )}{" "}
-                                    ৳
-                                </span>
-                            </div>
-                            <div className="flex justify-between pl-[40%] pr-2">
-                                <span>Shipping</span>
-                                <span>{codCharge} ৳</span>
-                            </div>
-                            <div className="flex justify-between pl-[40%] pr-2">
-                                <span>Order Total</span>
-                                <span className="text-[#f85506]">
-                                    {order.items.reduce(
-                                        (sum, item) =>
-                                            sum +
-                                            (item.pricing || discountsPrice) *
-                                                item.qty,
-                                        0,
-                                    ) + codCharge}{" "}
-                                    ৳
-                                </span>
-                            </div>
-                        </div>
-                    )}
+                    <SizeAndQty
+                        product={product}
+                        order={order}
+                        handleColor={handleColor}
+                        discountsPrice={discountsPrice}
+                        setOrder={setOrder}
+                    />
                 </div>
 
                 {/* RIGHT */}
 
-                {product.vars.length < 1 && (
-                    <div
-                        className="px-2 md-h-[100vh] md:overflow-y-scroll"
-                        // initial={{ scale: 0.8, opacity: 0 }} // শুরুতে ছোট এবং অদৃশ্য
-                        // whileInView={{ scale: 1, opacity: 1 }} // view-এ আসলে বড় এবং দেখা যাবে
-                        // viewport={{ once: true, amount: 0.2 }} // screen-এ 50% দেখলে animation হবে, একবারই
-                        // transition={{
-                        //     duration: 0.5,
-                        //     ease: "easeOut",
-                        // }}
-                    >
-                        {/* {
-                        (newAddress || saveAddresses.length < 1) ? <ShippingAddress address={customerDetails} setAddress={setCustomerDetails} /> : ""
-                    } */}
-
-                        {newAddress || saveAddresses.phone == null ? (
-                            <ShippingAddress2
-                                order={order}
-                                setOrder={setOrder}
-                            />
-                        ) : (
-                            ""
-                        )}
-
-                        {saveAddresses.phone != null && !newAddress && (
-                            <div className="">
-                                <div className="flex justify-between">
-                                    <h1 className="font-semibold py-2 border-gray-500 mt-4">
-                                        Select Shipping Address
-                                    </h1>
-                                    <button
-                                        className="border border-[#f85506] text-[14px] p-1 my-4 cursor-pointer"
-                                        onClick={() => {
-                                            setCustomerDetails({
-                                                name: "",
-                                                phone: "",
-                                                village: "",
-                                                union: "",
-                                                upazila: "",
-                                                district: "",
-                                                division: "",
-                                                landmark: "",
-                                            });
-                                            setNewAddress(true);
-                                        }}
-                                    >
-                                        + Add Address
-                                    </button>
-                                </div>
-
-                                {/* {saveAddresses.map((addr, idx) =>
-                                    addr.addressFull == null ? (
-                                        <div
-                                            key={idx}
-                                            className="bg-red border mb-2 text-[#1b1818] p-2 relative cursor-pointer "
-                                            onClick={() =>
-                                                setCustomerDetails({ ...addr })
-                                            }
-                                        >
-                                            {customerDetails.village ===
-                                                addr.village &&
-                                            customerDetails.phone ===
-                                                addr.phone &&
-                                            customerDetails.name ===
-                                                addr.name &&
-                                            customerDetails.union ===
-                                                addr.union ? (
-                                                <div className="absolute top-0 right-0 m-2 p-1 border rounded-full bg-white">
-                                                    {" "}
-                                                    <img
-                                                        src={blue_check}
-                                                        className="h-3 w-3"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="absolute top-0 right-0 m-2 p-1 border rounded-full h-5 w-5"></div>
-                                            )}
-                                            <div className="flex flex-col">
-                                                <span className="font-bold">
-                                                    {addr.name}{" "}
-                                                </span>
-                                                <span className="font-semibold ">
-                                                    {" "}
-                                                    {addr.phone}
-                                                </span>
-                                            </div>
-                                            <p className="text-[14px]">
-                                                {addr.village}, {addr.union},{" "}
-                                                {addr.upazila}, {addr.district},{" "}
-                                                {addr.division}
-                                            </p>
-                                        </div>
-                                    ) : (
-                                        <div
-                                            key={idx}
-                                            className="bg-red border mb-2 text-[#1b1818] p-2 relative cursor-pointer "
-                                        >
-                                            {addr.addressFull}
-                                            {addr.name}
-                                            {addr.phone}
-                                        </div>
-                                    ),
-                                )} */}
-                            </div>
-                        )}
-                        <div className="md:hidden h-15"></div>
-                        <div className="bg-[#b7bdc5] flex justify-center items-center md:py-1 max-md:shadow-lg max-md:fixed max-md:bottom-0 right-0 left-0 py-1 ">
-                            {/* <button
-                            onClick={handleBuyNow}
-                            className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
-                        >
-                            Place Order
-                        </button> */}
-
-                            {customerDetails.phone &&
-                            customerDetails.union &&
-                            customerDetails.village &&
-                            customerDetails.name ? (
-                                <button
-                                    onClick={handleBuyNow}
-                                    className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
-                                >
-                                    Place Order
-                                </button>
-                            ) : (
-                                <button
-                                    onClick={handleBuyNow}
-                                    className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition cursor-not-allowed"
-                                >
-                                    Place Order
-                                </button>
-                            )}
-                        </div>
-                    </div>
-                )}
-
                 {!order.items.find((itm) => itm.selectedSize == null) &&
                     order.items.length > 0 && (
-                        <div
-                            className="px-2 md-h-[100vh] md:overflow-y-scroll"
-                            // initial={{ scale: 0.8, opacity: 0 }} // শুরুতে ছোট এবং অদৃশ্য
-                            // whileInView={{ scale: 1, opacity: 1 }} // view-এ আসলে বড় এবং দেখা যাবে
-                            // viewport={{ once: true, amount: 0.2 }} // screen-এ 50% দেখলে animation হবে, একবারই
-                            // transition={{
-                            //     duration: 0.5,
-                            //     ease: "easeOut",
-                            // }}
-                        >
-
-
+                        <div className="px-2 md-h-[100vh] md:overflow-y-scroll">
                             {/* item SubTotal */}
-
-                            {order.items.length > 0 && (
-                                <div className="max-md:hidden w-full font-bold border">
-                                    <div className="flex justify-between pl-[40%] pr-2">
-                                        <span>Item Subtotal</span>
-                                        <span>
-                                            {order.items.reduce(
-                                                (sum, item) =>
-                                                    sum +
-                                                    (item.pricing ||
-                                                        discountsPrice) *
-                                                        item.qty,
-                                                0,
-                                            )}{" "}
-                                            ৳
-                                        </span>
-                                    </div>
-                                    <div className="flex justify-between pl-[40%] pr-2">
-                                        <span>Shipping</span>
-                                        <span>{codCharge} ৳</span>
-                                    </div>
-                                    <div className="flex justify-between pl-[40%] pr-2">
-                                        <span>Order Total</span>
-                                        <span className="text-[#f85506]">
-                                            {order.items.reduce(
-                                                (sum, item) =>
-                                                    sum +
-                                                    (item.pricing ||
-                                                        discountsPrice) *
-                                                        item.qty,
-                                                0,
-                                            ) + codCharge}{" "}
-                                            ৳
-                                        </span>
-                                    </div>
-                                </div>
-                            )}
-                            {/* {
-                        (newAddress || saveAddresses.length < 1) ? <ShippingAddress address={customerDetails} setAddress={setCustomerDetails} /> : ""
-                    } */}
+                            <div className="w-full mt-6">
+                                <Subtotal
+                                    discountsPrice={discountsPrice}
+                                    order={order}
+                                    codCharge={codCharge}
+                                />
+                            </div>
 
                             {newAddress || saveAddresses.phone == null ? (
                                 <ShippingAddress2
@@ -700,112 +257,143 @@ export default function Buy() {
                             {saveAddresses.phone != null && !newAddress && (
                                 <div className="">
                                     <div className="flex justify-between">
-                                        <h1 className="font-semibold py-2 border-gray-500 mt-4">
-                                            Select Shipping Address
+                                        <h1 className="font-semibold py-1 border-gray-500 mt-4">
+                                            পূর্বের ঠিকানা সিলেক্ট হয়েছে
                                         </h1>
+
                                         <button
-                                            className="border border-[#f85506] text-[14px] p-1 my-4 cursor-pointer"
+                                            className="border border-[#f85506] text-white rounded-md bg-green-500 text-[16px] p-1 my-4 cursor-pointer"
                                             onClick={() => {
-                                                setCustomerDetails({
-                                                    name: "",
-                                                    phone: "",
-                                                    village: "",
-                                                    union: "",
-                                                    upazila: "",
-                                                    district: "",
-                                                    division: "",
-                                                    landmark: "",
-                                                });
+                                                setOrder((prev) => ({
+                                                    ...prev,
+                                                    customerDetails: {
+                                                        name: "",
+                                                        phone: "",
+                                                        village: "",
+                                                        union: "",
+                                                        upazila: "",
+                                                        district: "",
+                                                        division: "",
+                                                        landmark: "",
+                                                        addressFull: "",
+                                                    },
+                                                }));
                                                 setNewAddress(true);
                                             }}
                                         >
-                                            + Add Address
+                                            + Add New Address
                                         </button>
                                     </div>
-
-                                    {/* {saveAddresses.map((addr, idx) =>
-                                    addr.addressFull == null ? (
-                                        <div
-                                            key={idx}
-                                            className="bg-red border mb-2 text-[#1b1818] p-2 relative cursor-pointer "
-                                            onClick={() =>
-                                                setCustomerDetails({ ...addr })
-                                            }
-                                        >
-                                            {customerDetails.village ===
-                                                addr.village &&
-                                            customerDetails.phone ===
-                                                addr.phone &&
-                                            customerDetails.name ===
-                                                addr.name &&
-                                            customerDetails.union ===
-                                                addr.union ? (
-                                                <div className="absolute top-0 right-0 m-2 p-1 border rounded-full bg-white">
-                                                    {" "}
-                                                    <img
-                                                        src={blue_check}
-                                                        className="h-3 w-3"
-                                                        alt=""
-                                                    />
-                                                </div>
-                                            ) : (
-                                                <div className="absolute top-0 right-0 m-2 p-1 border rounded-full h-5 w-5"></div>
-                                            )}
-                                            <div className="flex flex-col">
-                                                <span className="font-bold">
-                                                    {addr.name}{" "}
-                                                </span>
-                                                <span className="font-semibold ">
-                                                    {" "}
-                                                    {addr.phone}
-                                                </span>
+                                    <div className=" mb-1 border-2 border-green-400 bg-green-200 p-2 rounded-md flex justify-between">
+                                        <div>
+                                            <div className="flex items-center my-1">
+                                                <img
+                                                    className="h-5 w-5 mr-1"
+                                                    src={PlaceIcon}
+                                                    alt=""
+                                                />
+                                                {saveAddresses.addressFull ? (
+                                                    <p>
+                                                        {
+                                                            saveAddresses.addressFull
+                                                        }
+                                                    </p>
+                                                ) : (
+                                                    <div>
+                                                        {`${saveAddresses.village} / ${saveAddresses.union} / ${saveAddresses.upazila} / ${saveAddresses.district} / ${saveAddresses.division}`}
+                                                    </div>
+                                                )}
                                             </div>
-                                            <p className="text-[14px]">
-                                                {addr.village}, {addr.union},{" "}
-                                                {addr.upazila}, {addr.district},{" "}
-                                                {addr.division}
-                                            </p>
+
+                                            <div className="flex items-center my-1">
+                                                <img
+                                                    className="h-5 w-5 mr-1"
+                                                    src={ProfileIcon}
+                                                    alt=""
+                                                />
+                                                <h1>{saveAddresses.name}</h1>
+                                            </div>
+
+                                            <div className="flex items-center my-1">
+                                                <img
+                                                    className="h-5 w-5 mr-1"
+                                                    src={PhoneIcon}
+                                                    alt=""
+                                                />
+                                                <h1>{saveAddresses.phone}</h1>
+                                            </div>
                                         </div>
-                                    ) : (
                                         <div
-                                            key={idx}
-                                            className="bg-red border mb-2 text-[#1b1818] p-2 relative cursor-pointer "
+                                            className="flex items-center justify-center h-7 w-7"
+                                            onClick={() => {
+                                                setOrder((prev) => ({
+                                                    ...prev,
+                                                    customerDetails: {
+                                                        name: "",
+                                                        phone: "",
+                                                        village: "",
+                                                        union: "",
+                                                        upazila: "",
+                                                        district: "",
+                                                        division: "",
+                                                        landmark: "",
+                                                        addressFull: "",
+                                                    },
+                                                }));
+                                                setNewAddress(true);
+                                            }}
                                         >
-                                            {addr.addressFull}
-                                            {addr.name}
-                                            {addr.phone}
+                                            <img
+                                                className="w-4"
+                                                src={CrossBlack}
+                                                alt=""
+                                            />
                                         </div>
-                                    ),
-                                )} */}
+                                    </div>
                                 </div>
                             )}
-                            <div className="md:hidden h-15"></div>
-                            <div className="bg-[#b7bdc5] flex justify-center items-center md:py-1 max-md:shadow-lg max-md:fixed max-md:bottom-0 right-0 left-0 py-1 ">
-                                {/* <button
-                            onClick={handleBuyNow}
-                            className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
-                        >
-                            Place Order
-                        </button> */}
 
-                                {customerDetails.phone &&
-                                customerDetails.union &&
-                                customerDetails.village &&
-                                customerDetails.name ? (
-                                    <button
-                                        onClick={() => handleBuyNow(order)}
-                                        className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition"
-                                    >
-                                        Place Order
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={() => handleBuyNow(order)}
-                                        className="md:mx-2  w-[80%] text-[20px] py-2 font-bold text-white  border h-full bg-[#f85506] border-gray-400 px-6 rounded-lg hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100 transition cursor-not-allowed"
-                                    >
-                                        Place Order
-                                    </button>
-                                )}
+                            <div>
+                                <label
+                                    className="mt-2 text-[18px] pl-1 font-semibold"
+                                    htmlFor="note"
+                                >
+                                    Note (বিশেষ কিছু বলে দিতে পারেন)
+                                </label>
+                                <textarea
+                                    onChange={(event) =>
+                                        setOrder({
+                                            ...order,
+                                            note: event.target.value,
+                                        })
+                                    }
+                                    value={order.note}
+                                    placeholder="এটি একটি উপহার বাক্সে পাঠান।"
+                                    rows="2"
+                                    className="w-full mb-2 px-4 py-3 rounded bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-orange-400 resize-none"
+                                    required
+                                    id="note"
+                                />
+                            </div>
+
+                            <div className="md:hidden h-20"></div>
+
+                            {/* Place Order Button */}
+                            <div className="max-md:bg-[#b7bdc5] flex justify-center items-center md:py-1 max-md:shadow-lg max-md:fixed max-md:bottom-0 right-0 left-0 py-1">
+                                <button
+                                    disabled={!isValidOrder}
+                                    onClick={() =>
+                                        isValidOrder && handleBuyNow(order)
+                                    }
+                                    className={`md:mx-2 w-[80%] font-bold border h-full px-6 rounded-lg transition
+        ${
+            isValidOrder
+                ? "text-white bg-[#f85506] border-gray-400 hover:text-[#f85506] hover:border-[#f85506] hover:bg-gray-100"
+                : "text-white bg-[#f85506] opacity-50 cursor-not-allowed"
+        }`}
+                                >
+                                    Place Order <br />৳ {totalPrice}
+                                </button>
                             </div>
                         </div>
                     )}

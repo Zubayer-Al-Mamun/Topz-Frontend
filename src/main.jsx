@@ -20,6 +20,10 @@ import { product, products } from "./loader/loader";
 import Buy from "./components/buy/Buy";
 import SeeColor from "./components/adminPanel/compo/SeeColor";
 import Loading from "./components/Loading";
+import Order from "./components/orders/Order";
+import Setup from "./components/adminPanel/setup/Setup.jsx"
+
+
 
 const router = createBrowserRouter([
     {
@@ -42,6 +46,10 @@ const router = createBrowserRouter([
                 path: "shop",
                 element: <Shop />,
                 loader: products,
+            },
+            {
+                path : "/orders",
+                element : <Order/>
             },
             {
                 path: "product/:productId",
@@ -71,6 +79,10 @@ const router = createBrowserRouter([
                     {
                         index: true,
                         element: <Analytics />,
+                    },
+                    {
+                        path: "setup",
+                        element: <Setup/>
                     },
                     {
                         path: "products",

@@ -265,7 +265,7 @@ export default function SingleProduct() {
                             </a>
 
                             <a
-                                href={`https://wa.me/${import.meta.env.VITE_CONTACT_WHATS
+                                href={`https://wa.me/${import.meta.env.VITE_CONTACT_WHATSAPP
                                     }`}
                                 className="group flex justify-center text-[14px] p-2 border ml-2 rounded-full hover:bg-green-400 border-green-400"
                             >
