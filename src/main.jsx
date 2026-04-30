@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { addProduct } from "./actions/action";
+import Loading from "./components/Loading";
 import Page from "./components/Page";
 import PrivateRoute from "./components/PrivateRoute";
 import SingleProduct from "./components/SingleProduct";
@@ -11,35 +12,33 @@ import Dashboard from "./components/adminPanel/Dashboard";
 import ProductEdit from "./components/adminPanel/ProductEdit";
 import AdminProducts from "./components/adminPanel/compo/AdminProducts";
 import Analytics from "./components/adminPanel/compo/Analytics";
+import SeeColor from "./components/adminPanel/compo/SeeColor";
 import Login from "./components/adminPanel/login";
+import OrdersAdmin from "./components/adminPanel/orders/OrdersAdmin.jsx";
+import Setup from "./components/adminPanel/setup/Setup.jsx";
+import Buy from "./components/buy/Buy";
 import ContactUs from "./components/contacts/ContactUs";
 import Home from "./components/home/Home";
+import Order from "./components/orders/Order.jsx";
 import Shop from "./components/shop/Shop";
 import "./index.css";
 import { product, products } from "./loader/loader";
-import Buy from "./components/buy/Buy";
-import SeeColor from "./components/adminPanel/compo/SeeColor";
-import Loading from "./components/Loading";
-import Order from "./components/orders/Order";
-import Setup from "./components/adminPanel/setup/Setup.jsx"
-
-
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <Page />,
         errorElement: <div>Some error in this Route..</div>,
-        hydrateFallbackElement: <Loading/>,
+        hydrateFallbackElement: <Loading />,
         children: [
             {
                 index: true,
-                element: <Home /> ,
+                element: <Home />,
                 loader: products,
             },
             {
                 path: "buy/:productId",
-                element: <Buy/>,
+                element: <Buy />,
                 loader: product,
             },
             {
@@ -48,8 +47,8 @@ const router = createBrowserRouter([
                 loader: products,
             },
             {
-                path : "/orders",
-                element : <Order/>
+                path: "/orders",
+                element: <Order />,
             },
             {
                 path: "product/:productId",
@@ -74,7 +73,7 @@ const router = createBrowserRouter([
         children: [
             {
                 element: <Dashboard />,
-                hydrateFallbackElement: <Loading/>,
+                hydrateFallbackElement: <Loading />,
                 children: [
                     {
                         index: true,
@@ -82,7 +81,11 @@ const router = createBrowserRouter([
                     },
                     {
                         path: "setup",
-                        element: <Setup/>
+                        element: <Setup />,
+                    },
+                    {
+                        path: "orders",
+                        element: <OrdersAdmin />,
                     },
                     {
                         path: "products",
@@ -90,14 +93,14 @@ const router = createBrowserRouter([
                         loader: products,
                     },
                     {
-                        path : "products/seecolor/:productId",
-                        element : <SeeColor/>,
-                        loader : product,
+                        path: "products/seecolor/:productId",
+                        element: <SeeColor />,
+                        loader: product,
                     },
                     {
                         path: "products/addcolor/:productId",
                         element: <AddColor />,
-                        loader : product,
+                        loader: product,
                     },
                     {
                         path: "products/:productId",
@@ -122,5 +125,5 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
     <StrictMode>
         <RouterProvider router={router} />
-    </StrictMode>
+    </StrictMode>,
 );

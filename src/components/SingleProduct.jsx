@@ -353,6 +353,7 @@ export default function SingleProduct() {
 
                 {showFullDesc ? (
                     <div
+                        style={{ whiteSpace: "pre-line" }}
                         onClick={() => setShowFullDesc(!showFullDesc)}
                         className="text-gray-600 leading-relaxed mb-6 cursor-pointer relative"
                     >
@@ -365,6 +366,7 @@ export default function SingleProduct() {
                     </div>
                 ) : (
                     <div
+                    style={{ whiteSpace: "pre-line" }}
                         onClick={() => setShowFullDesc(!showFullDesc)}
                         className="text-gray-600 leading-relaxed mb-6 line-clamp-2 relative cursor-pointer"
                     >

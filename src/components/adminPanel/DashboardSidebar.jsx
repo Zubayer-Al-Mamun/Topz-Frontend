@@ -12,6 +12,8 @@ export default function DashboardSidebar({setShowDashboardSidebar}) {
                 <ul className="space-y-2 flex flex-col">
                     <NavLink className="px-3 py-2 rounded-lg hover:bg-indigo-100 cursor-pointer" to="/admin">Dashboard</NavLink>
                     {[
+                        
+                        "Orders",
                         "Products",
                         "NewProduct",
                         "CRM",
