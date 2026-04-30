@@ -17,7 +17,7 @@ export default function DashboardSidebar({setShowDashboardSidebar}) {
                         "Products",
                         "NewProduct",
                         "CRM",
-                        "eCommerce",
+                        "Setup",
                         "Academy",
                         "Logistics",
                         "Analytics",
