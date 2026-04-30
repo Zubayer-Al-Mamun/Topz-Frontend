@@ -1,20 +1,32 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import ReactCrop from "react-image-crop";
+import "react-image-crop/dist/ReactCrop.css";
 
 export default function Setup() {
     const [banners, setBanners] = useState([]);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [editingBanner, setEditingBanner] = useState(null);
 
+    // Image cropping states
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
+    const [crop, setCrop] = useState(null);
+    const [completedCrop, setCompletedCrop] = useState(null);
+    const [croppedImageUrl, setCroppedImageUrl] = useState(null);
+    const [showCropper, setShowCropper] = useState(false);
+    const imgRef = useRef(null);
+
     const [formData, setFormData] = useState({
         title: "",
-        imageUrl: "",
         redirectType: "internal",
         redirectUrl: "",
         isActive: true,
         order: 1,
     });
 
-    // Fetch banners on mount
+    // 16:9 aspect ratio
+    const ASPECT_RATIO = 16 / 9;
+
     useEffect(() => {
         fetchBanners();
     }, []);
@@ -34,21 +46,175 @@ export default function Setup() {
     function resetForm() {
         setFormData({
             title: "",
-            imageUrl: "",
             redirectType: "internal",
             redirectUrl: "",
             isActive: true,
             order: 1,
         });
         setEditingBanner(null);
+        setSelectedFile(null);
+        setImageSrc(null);
+        setCrop(null);
+        setCompletedCrop(null);
+        setCroppedImageUrl(null);
+        setShowCropper(false);
+    }
+
+    // Handle file selection
+    function handleFileChange(e) {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImageSrc(reader.result);
+            setShowCropper(true);
+            setCroppedImageUrl(null);
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // When image loads, set initial crop to center with 16:9 ratio
+    function onImageLoad(e) {
+        const { width, height } = e.currentTarget;
+        
+        // Calculate crop dimensions maintaining 16:9 aspect ratio
+        let cropWidth = width;
+        let cropHeight = width / ASPECT_RATIO;
+
+        if (cropHeight > height) {
+            cropHeight = height;
+            cropWidth = height * ASPECT_RATIO;
+        }
+
+        const cropX = (width - cropWidth) / 2;
+        const cropY = (height - cropHeight) / 2;
+
+        const initialCrop = {
+            unit: "px",
+            x: cropX,
+            y: cropY,
+            width: cropWidth,
+            height: cropHeight,
+        };
+
+        setCrop(initialCrop);
+        setCompletedCrop(initialCrop);
+    }
+
+    // Generate cropped image
+    function getCroppedImg() {
+        if (!imgRef.current || !completedCrop) return;
+
+        const image = imgRef.current;
+        const canvas = document.createElement("canvas");
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+
+        canvas.width = completedCrop.width * scaleX;
+        canvas.height = completedCrop.height * scaleY;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(
+            image,
+            completedCrop.x * scaleX,
+            completedCrop.y * scaleY,
+            completedCrop.width * scaleX,
+            completedCrop.height * scaleY,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        // Convert to blob and create URL
+        canvas.toBlob(
+            (blob) => {
+                if (blob) {
+                    const croppedUrl = URL.createObjectURL(blob);
+                    setCroppedImageUrl(croppedUrl);
+                    setShowCropper(false);
+                }
+            },
+            "image/jpeg",
+            0.95
+        );
+    }
+
+    // Convert cropped image URL to File for upload
+    async function getCroppedFile() {
+        if (!imgRef.current || !completedCrop) return null;
+
+        const image = imgRef.current;
+        const canvas = document.createElement("canvas");
+        const scaleX = image.naturalWidth / image.width;
+        const scaleY = image.naturalHeight / image.height;
+
+        canvas.width = completedCrop.width * scaleX;
+        canvas.height = completedCrop.height * scaleY;
+
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(
+            image,
+            completedCrop.x * scaleX,
+            completedCrop.y * scaleY,
+            completedCrop.width * scaleX,
+            completedCrop.height * scaleY,
+            0,
+            0,
+            canvas.width,
+            canvas.height
+        );
+
+        return new Promise((resolve) => {
+            canvas.toBlob(
+                (blob) => {
+                    if (blob) {
+                        const file = new File(
+                            [blob],
+                            selectedFile?.name || "banner.jpg",
+                            { type: "image/jpeg" }
+                        );
+                        resolve(file);
+                    } else {
+                        resolve(null);
+                    }
+                },
+                "image/jpeg",
+                0.95
+            );
+        });
     }
 
     async function handleSubmit(e) {
         e.preventDefault();
         if (isSubmitting) return;
+
+        // Validate image
+        if (!croppedImageUrl && !editingBanner) {
+            alert("Please select and crop an image");
+            return;
+        }
+
         setIsSubmitting(true);
 
         try {
+            const submitData = new FormData();
+            submitData.append("title", formData.title);
+            submitData.append("redirectType", formData.redirectType);
+            submitData.append("redirectUrl", formData.redirectUrl);
+            submitData.append("isActive", formData.isActive);
+            submitData.append("order", formData.order);
+
+            // Add cropped image if available
+            if (croppedImageUrl && imgRef.current && completedCrop) {
+                const croppedFile = await getCroppedFile();
+                if (croppedFile) {
+                    submitData.append("image", croppedFile);
+                }
+            }
+
             const url = editingBanner
                 ? `${import.meta.env.VITE_API_URL}/banners/${editingBanner._id}`
                 : `${import.meta.env.VITE_API_URL}/banners`;
@@ -57,10 +223,7 @@ export default function Setup() {
 
             const res = await fetch(url, {
                 method,
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
+                body: submitData,
             });
 
             if (res.ok) {
@@ -131,13 +294,13 @@ export default function Setup() {
     function handleEdit(banner) {
         setFormData({
             title: banner.title,
-            imageUrl: banner.imageUrl,
             redirectType: banner.redirectType,
             redirectUrl: banner.redirectUrl,
             isActive: banner.isActive,
             order: banner.order,
         });
         setEditingBanner(banner);
+        setCroppedImageUrl(banner.imageUrl);
         window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -180,34 +343,158 @@ export default function Setup() {
                     />
                 </div>
 
-                {/* Image URL */}
+                {/* Image Upload */}
                 <div>
-                    <label className="block text-sm font-medium text-gray-600">
-                        Image URL
+                    <label className="block text-sm font-medium text-gray-600 mb-2">
+                        Banner Image (16:9 ratio)
                     </label>
-                    <input
-                        type="url"
-                        value={formData.imageUrl}
-                        onChange={(e) =>
-                            setFormData({
-                                ...formData,
-                                imageUrl: e.target.value,
-                            })
-                        }
-                        placeholder="https://example.com/banner.jpg"
-                        className="w-full p-2 border rounded-lg mt-1 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none"
-                        required
-                    />
-                    {formData.imageUrl && (
-                        <div className="mt-2">
-                            <img
-                                src={formData.imageUrl}
-                                alt="Banner preview"
-                                className="max-h-32 rounded-lg border object-cover"
-                                onError={(e) => {
-                                    e.target.style.display = "none";
-                                }}
+
+                    {/* File Input */}
+                    <div className="flex items-center gap-4">
+                        <label className="cursor-pointer bg-amber-50 hover:bg-amber-100 border-2 border-dashed border-amber-300 rounded-lg px-4 py-3 flex items-center gap-2 transition-colors">
+                            <svg
+                                className="w-5 h-5 text-amber-600"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                />
+                            </svg>
+                            <span className="text-amber-700 font-medium">
+                                {selectedFile
+                                    ? "Change Image"
+                                    : "Select Image"}
+                            </span>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={handleFileChange}
+                                className="hidden"
                             />
+                        </label>
+                        {selectedFile && (
+                            <span className="text-sm text-gray-500 truncate max-w-[200px]">
+                                {selectedFile.name}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* Cropper Modal */}
+                    {showCropper && imageSrc && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4">
+                            <div className="bg-white rounded-xl p-4 max-w-3xl w-full max-h-[90vh] overflow-auto">
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-lg font-semibold text-gray-800">
+                                        Crop Image (16:9)
+                                    </h3>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowCropper(false);
+                                            setImageSrc(null);
+                                            setSelectedFile(null);
+                                        }}
+                                        className="text-gray-400 hover:text-gray-600"
+                                    >
+                                        <svg
+                                            className="w-6 h-6"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M6 18L18 6M6 6l12 12"
+                                            />
+                                        </svg>
+                                    </button>
+                                </div>
+
+                                <div className="flex justify-center bg-gray-100 rounded-lg p-2">
+                                    <ReactCrop
+                                        crop={crop}
+                                        onChange={(c) => setCrop(c)}
+                                        onComplete={(c) => setCompletedCrop(c)}
+                                        aspect={ASPECT_RATIO}
+                                    >
+                                        <img
+                                            ref={imgRef}
+                                            src={imageSrc}
+                                            alt="Crop preview"
+                                            onLoad={onImageLoad}
+                                            className="max-h-[60vh] object-contain"
+                                            crossOrigin="anonymous"
+                                        />
+                                    </ReactCrop>
+                                </div>
+
+                                <div className="flex justify-end gap-3 mt-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            setShowCropper(false);
+                                            setImageSrc(null);
+                                            setSelectedFile(null);
+                                        }}
+                                        className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="button"
+                                        onClick={getCroppedImg}
+                                        className="px-4 py-2 bg-amber-500 hover:bg-amber-600 text-white rounded-lg font-medium"
+                                    >
+                                        Apply Crop
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Cropped Image Preview */}
+                    {croppedImageUrl && !showCropper && (
+                        <div className="mt-3">
+                            <p className="text-xs text-gray-500 mb-1">
+                                Preview (16:9):
+                            </p>
+                            <div className="relative inline-block">
+                                <img
+                                    src={croppedImageUrl}
+                                    alt="Cropped banner preview"
+                                    className="max-h-40 rounded-lg border object-cover"
+                                />
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setCroppedImageUrl(null);
+                                        setSelectedFile(null);
+                                        setImageSrc(null);
+                                    }}
+                                    className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
+                                >
+                                    <svg
+                                        className="w-4 h-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth={2}
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     )}
                 </div>
@@ -360,14 +647,14 @@ export default function Setup() {
                                     }`}
                                 >
                                     {/* Banner Image */}
-                                    <div className="sm:w-48 h-32 flex-shrink-0">
+                                    <div className="sm:w-48 h-28 flex-shrink-0">
                                         <img
                                             src={banner.imageUrl}
                                             alt={banner.title}
                                             className="w-full h-full object-cover rounded-lg"
                                             onError={(e) => {
                                                 e.target.src =
-                                                    "https://via.placeholder.com/200x100?text=No+Image";
+                                                    "https://via.placeholder.com/200x113?text=No+Image";
                                             }}
                                         />
                                     </div>
