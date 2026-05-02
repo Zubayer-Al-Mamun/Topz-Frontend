@@ -368,7 +368,7 @@ export default function SingleProduct() {
                     <div
                     style={{ whiteSpace: "pre-line" }}
                         onClick={() => setShowFullDesc(!showFullDesc)}
-                        className="text-gray-600 leading-relaxed mb-6 line-clamp-2 relative cursor-pointer"
+                        className="text-gray-600 leading-relaxed mb-6 line-clamp-4 relative cursor-pointer"
                     >
                         {product.description}{" "}
                         <span className="text-black text-[18px] absolute bottom-0 right-0 bg-[#F8F8F0] px-3 font-semibold">

@@ -6,7 +6,7 @@ export default function DashboardSidebar({setShowDashboardSidebar}) {
         setShowDashboardSidebar(false);
     }
     return (
-        <div className=" bg-[#ECEEDF] h-full shadow-md flex flex-col z-20"
+        <div className=" bg-[#ECEEDF] h-full shadow-md flex flex-col z-30"
             onClick={handleSidebar}>
             <nav className="bg-[#d9c4b0] flex-1 p-4 mt-[60px]">
                 <ul className="space-y-2 flex flex-col">
@@ -16,8 +16,8 @@ export default function DashboardSidebar({setShowDashboardSidebar}) {
                         "Orders",
                         "Products",
                         "NewProduct",
-                        "CRM",
                         "Setup",
+                        "CRM",
                         "Academy",
                         "Logistics",
                         "Analytics",

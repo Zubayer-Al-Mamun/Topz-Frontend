@@ -30,7 +30,7 @@ export default function Dashboard() {
             {/* Main Content */}
             <div className="flex-1 flex flex-col relative overflow-y-auto overflow-x-hidden">
 
-                <header className="fixed top-0 left-0 right-0  h-[60px] flex items-center justify-between shadow-sm text-[12px] text-white overflow-hidden">
+                <header className="fixed top-0 left-0 right-0 z-40 h-[60px] flex items-center justify-between shadow-sm text-[12px] text-white overflow-hidden">
                     <img
                         className="object-cover absolute -z-10 max-sm:hidden"
                         src={bg_lg}

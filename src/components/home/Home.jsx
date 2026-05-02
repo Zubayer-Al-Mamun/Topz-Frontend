@@ -7,6 +7,8 @@ import BottomNavbar from "./bottom_nav/BottomNavbar";
 export default function Home() {
     const products = useLoaderData();
 
+    console.log(products)
+
     // const products = [...products_data].sort(() => Math.random() - 0.5);
 
     const categories = ["Shirt", "T-Shirt", "Hoodie", "Drop Shoulder"];
