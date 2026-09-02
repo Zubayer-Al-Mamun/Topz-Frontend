@@ -4,11 +4,13 @@ import CartProvider from "../context/CartProvider";
 import Header from "./home/header/Header";
 import SideNavbar from "./home/SideNavbar";
 import BottomNavbar from "./home/bottom_nav/BottomNavbar";
+import { CartContext } from "../context/CartContext";
 
 export default function Page() {
     const [showSideNavbar, setShowSideNavbar] = useState(false);
     const [showCategory, setShowCategory] = useState(true);
     const scrollRef = useRef(0);
+    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem("cartItem")) || []);
 
     //     useEffect(() => {
     //     // Page load এর পর একটু scroll করানো হয়
@@ -21,7 +23,7 @@ export default function Page() {
 
     return (
         <>
-            <CartProvider>
+            <CartContext.Provider value={{cartItems, setCartItems}} >
                 <div
                     className="bg-[#09090915] w-[100%] relative flex flex-col items-center "
                     onWheel={(e) => {
@@ -55,7 +57,7 @@ export default function Page() {
                         </div>
                     </div>
                 </div>
-            </CartProvider>
+            </CartContext.Provider>
         </>
     );
 }

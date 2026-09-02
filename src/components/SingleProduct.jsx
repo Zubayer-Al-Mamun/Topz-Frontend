@@ -1,10 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Link, useLoaderData, useNavigate } from "react-router-dom";
 import phoneIcon from "../assets/phone-1.svg";
 import starIconYellow from "../assets/starYellow.svg";
 import WhatsappIcon from "../assets/whatsapp.svg";
 import { pushDataLayer } from "../utils/datalayer.js";
 import PopUp from "./Popup.jsx";
+import { CartContext } from "../context/CartContext.jsx";
 
 export default function SingleProduct() {
     const [showFullTitle, setShowFullTitle] = useState(false);
@@ -26,6 +27,22 @@ export default function SingleProduct() {
     const handleBuyNow = (product_id) => {
         navigate(`/buy/${product_id}`)
     }
+
+
+    const {cartItems, setCartItems} = useContext(CartContext);
+
+    function handleCart(item) {
+        const found = cartItems.find((pro) => {
+            return pro._id === item._id;
+        });
+
+        if(!found){
+            setCartItems([...cartItems, item]);
+            localStorage.setItem("cartItem", JSON.stringify(cartItems) )
+        }
+    }
+
+
 
     useEffect(() => {
         if (!product || pushedRef.current) return;
@@ -281,7 +298,9 @@ export default function SingleProduct() {
                             </a>
                         </div>
                         <div className=" flex text-[14px] items-center h-[45px]">
-                            <button className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
+                            <button
+                                onClick={handleCart(product)}
+                            className="bg-[#f85506] h-full text-white px-5 rounded-lg hover:bg-gray-800 transition">
                                 Add to Cart
                             </button>
                             <button
